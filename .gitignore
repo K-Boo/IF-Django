@@ -1,0 +1,30 @@
+# Exceptions globales pour la Code Factory
+!.antigravity/
+!.antigravity/**
+!.agents/
+!.agents/**
+
+# Dépendances Node
+node_modules/
+dist/
+
+# Environnements virtuels Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environnements et secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Logs et runtime
+*.log
+npm-debug.log*
+.factory/cache/
+
+# OS
+.DS_Store
+Thumbs.db

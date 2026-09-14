@@ -1,0 +1,34 @@
+{
+  "name": "agentic-code-factory-core",
+  "version": "1.0.0",
+  "description": "Orchestration engine and CLI for the Agentic Code Factory",
+  "main": "dist/index.js",
+  "bin": {
+    "code-factory": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "cli": "tsx src/index.ts",
+    "test": "node --test dist/test/*.test.js",
+    "test:src": "tsx --test src/test/*.test.ts"
+  },
+  "keywords": [
+    "agentic",
+    "code-factory",
+    "ai-agents",
+    "orchestrator",
+    "tdd",
+    "evaluator-optimizer"
+  ],
+  "author": "CodeFactory Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}
