@@ -21,6 +21,10 @@
 3. **Séparation Étanchée et Discrétion Absolue du Dépôt GitLab** :
    - **Dépôt GitHub privé** (`git@github.com:K-Boo/IF-Django.git`) : héberge l'ensemble de l'outillage agentique, les prompts des experts virtuels, la préparation du matériel didactique (slides et TP dans `pedagogy/`) et le journal de bord technique.
    - **Dépôt GitLab académique** (`git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`) : strictement réservé au projet applicatif pour les professeurs et collègues. **Zéro trace, zéro mention d'IA, d'agents, de prompts ou de liens vers GitHub. Historique de commit 100% propre sous identité universitaire.**
+4. **Coordination Multi-Agents pour le Groupe de 3 Étudiants** :
+   - Chaque étudiant dispose de son assistant IA.
+   - Le bus de synchronisation partagé est `docs/SUIVI_AVANCEMENT.md` sur GitLab.
+   - La règle `.antigravity/rules/05_multi_agent_coordination.md` formalise la façon dont les agents lisent l'avancement des autres membres pour adapter leur travail en fonction des dépendances.
 
 ---
 
@@ -33,11 +37,12 @@
 
 ### Étape 2 : Configuration du Dépôt d'Assistance Agentique (GitHub)
 - Nettoyage des reliquats de l'ancienne usine générique.
-- Rédaction de `.antigravity/INSTRUCTIONS.md` et de 4 règles spécialisées :
+- Rédaction de `.antigravity/INSTRUCTIONS.md` et des règles spécialisées :
   - `01_django_standards.md` : Idiomes Django, Clean Architecture par apps, intégrité transactionnelle.
   - `02_pedagogical_standards.md` : Didactique de l'atelier, taxonomie de Bloom, détection des pièges étudiants.
   - `03_performance_and_scale.md` : « Think HUGE », élimination des requêtes N+1, agrégations SQL natives.
   - `04_git_and_collaboration.md` : Stratégie de double versionnage GitHub / GitLab.
+  - `05_multi_agent_coordination.md` : Protocole de synchronisation inter-agents via le registre d'avancement.
 - Définition de 4 compétences d'assistance : `pedagogy-lead`, `django-architect`, `django-qa-tester`, `devops-multiuser`.
 - Sauvegarde du matériel pédagogique dans `pedagogy/` (`tp/`, `presentation/`, `instructions_sujet/`).
 - Connexion au dépôt distant `git@github.com:K-Boo/IF-Django.git` et push sur la branche `main`.
@@ -45,7 +50,7 @@
 ### Étape 3 : Réinitialisation à Neuf du Dépôt GitLab Académique (Historique Vierge)
 - Réception du nouveau dépôt GitLab recréé par l'utilisateur avec un commit initial unique.
 - Configuration de l'identité Git locale avec l'adresse universitaire de l'étudiant (`Khalil Bouchama <khalil.bouchama.etu@univ-lille.fr>`).
-- Dépôt exclusif de la base du projet applicatif (8 fichiers) :
+- Dépôt exclusif de la base du projet applicatif :
   - `README.md` : Présentation du projet pour les enseignants et prérequis.
   - `.gitignore`, `.env.example`, `requirements.txt`.
   - `docker-compose.yml` : Configuration PostgreSQL 16 conteneurisée partagée.
@@ -55,3 +60,12 @@
 - Scan lexical exhaustif validant **zéro trace ou mention d'IA/agent/GitHub**.
 - Commit et push propre :
   `7c8da56 Initial commit` -> `4668f1f feat: initialisation de l'environnement, specifications et architecture`.
+
+### Étape 4 : Déploiement du Plan de Répartition en 3 Volets & Tableau de Suivi
+- Rédaction de [`docs/REPARTITION_PROJET.md`](file:///C:/Users/hpome/Documents/M2_MIAGE/IF-Django/docs/REPARTITION_PROJET.md) :
+  - **Membre 1** : `apps.accounts`, `apps.wallets` + Présentation Partie 1 (MVT/Auth) + TP Exercice 1 (Modèles & Admin).
+  - **Membre 2** : `apps.expenses`, Répartitions, Algorithme de dette + Présentation Partie 2 (ORM/Agrégations) + TP Exercice 2 (N+1 & SQL).
+  - **Membre 3** : Performance "Think HUGE", Concurrence, Transactions atomiques, Docker + Présentation Partie 3 (Charge & Quiz) + TP Exercice 3 (Concurrence).
+- Rédaction de [`docs/SUIVI_AVANCEMENT.md`](file:///C:/Users/hpome/Documents/M2_MIAGE/IF-Django/docs/SUIVI_AVANCEMENT.md) : Registre de synchronisation permettant à chaque membre et son agent de connaître l'état précis des dépendances et contrats disponibles.
+- Scan d'intégrité (0 terme suspect) et publication sur GitLab :
+  `8418f56 docs(team): plan de repartition du travail en 3 parties et tableau de suivi`.
