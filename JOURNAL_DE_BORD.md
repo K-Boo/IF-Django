@@ -16,11 +16,11 @@
    - Abandon total de l'approche microservices d'entreprise générique.
    - Recentrage strict sur les attendus du module **IF-Django** : exploration pédagogique approfondie de Django, transmission du savoir à la promotion (séance de 3 heures : 60 min de présentation magistrale + 120 min de TP dirigé).
 2. **Règle d'or de la Phase 1 : Zéro Code Applicatif Métier Prématuré** :
-   - La présente phase configure l'ensemble des dépôts, les spécifications fonctionnelles, l'infrastructure partagée, les supports pédagogiques (TP et slides) et les règles d'ingénierie.
+   - La présente phase configure l'ensemble des dépôts, les spécifications fonctionnelles, l'infrastructure partagée et les règles d'ingénierie.
    - Le code applicatif Django (modèles, vues, templates, API) sera développé au fur et à mesure avec validation humaine.
 3. **Séparation Étanchée et Discrétion Absolue du Dépôt GitLab** :
-   - **Dépôt GitHub privé** (`git@github.com:K-Boo/IF-Django.git`) : héberge l'ensemble de l'outillage agentique, prompts des experts virtuels et journal de bord technique.
-   - **Dépôt GitLab académique** (`git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`) : strictement réservé au code, aux documents pédagogiques et aux livrables étudiants. **Zéro mention d'IA, d'agents, de prompts ou de liens vers GitHub**.
+   - **Dépôt GitHub privé** (`git@github.com:K-Boo/IF-Django.git`) : héberge l'ensemble de l'outillage agentique, les prompts des experts virtuels, la préparation du matériel didactique (slides et TP dans `pedagogy/`) et le journal de bord technique.
+   - **Dépôt GitLab académique** (`git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`) : strictement réservé au projet applicatif pour les professeurs et collègues. **Zéro trace, zéro mention d'IA, d'agents, de prompts ou de liens vers GitHub. Historique de commit 100% propre sous identité universitaire.**
 
 ---
 
@@ -39,31 +39,19 @@
   - `03_performance_and_scale.md` : « Think HUGE », élimination des requêtes N+1, agrégations SQL natives.
   - `04_git_and_collaboration.md` : Stratégie de double versionnage GitHub / GitLab.
 - Définition de 4 compétences d'assistance : `pedagogy-lead`, `django-architect`, `django-qa-tester`, `devops-multiuser`.
+- Sauvegarde du matériel pédagogique dans `pedagogy/` (`tp/`, `presentation/`, `instructions_sujet/`).
 - Connexion au dépôt distant `git@github.com:K-Boo/IF-Django.git` et push sur la branche `main`.
 
-### Étape 3 : Initialisation du Dépôt Académique Partagé (GitLab Univ-Lille)
-- Structuration complète du répertoire sans écriture prématurée de code métier Django :
-  - `README.md` : Guide d'accueil officiel pour les enseignants, collègues et camarades.
+### Étape 3 : Réinitialisation à Neuf du Dépôt GitLab Académique (Historique Vierge)
+- Réception du nouveau dépôt GitLab recréé par l'utilisateur avec un commit initial unique.
+- Configuration de l'identité Git locale avec l'adresse universitaire de l'étudiant (`Khalil Bouchama <khalil.bouchama.etu@univ-lille.fr>`).
+- Dépôt exclusif de la base du projet applicatif (8 fichiers) :
+  - `README.md` : Présentation du projet pour les enseignants et prérequis.
   - `.gitignore`, `.env.example`, `requirements.txt`.
-  - `docker-compose.yml` : Configuration d'une base PostgreSQL 16 conteneurisée partagée et pgAdmin.
-  - `.gitlab-ci.yml` : Pipeline d'intégration continue GitLab (vérifications flake8 / black / pytest).
-- Documentation de cadrage dans `docs/` :
-  - `docs/SPECIFICATIONS.md` : Cahier des charges exhaustif du sujet « Les Bons Comptes ».
-  - `docs/ARCHITECTURE_DJANGO.md` : Modèle Conceptuel de Données (MCD Mermaid), stratégie de requêtage ORM et isolation transactionnelle.
-  - `docs/RAPPORT_SYNTHESE.md` : Trame préparatoire pour le rapport individuel de synthèse (Coeff. 3).
-- Matériel pour l'Atelier / TP Dirigé de 120 minutes dans `tp/` :
-  - `tp/INSTRUCTIONS_ETUDIANT.md` : Guide de prise en main en moins de 5 minutes pour les étudiants débutants.
-  - `tp/SUJET_TP.md` : Sujet complet articulé autour de 3 exercices progressifs (Modèles & Admin, Piège du N+1 & Agrégations SQL, Transactions sous concurrence).
-  - `tp/squelettes/` : Répertoire d'accueil des squelettes de code à trous.
-  - `tp/corrige_prof/CORRIGE_COMMENTE.md` : Solutions détaillées et guide d'animation pour les présentateurs.
-- Matériel pour la Présentation de 60 minutes dans `presentation/` :
-  - `presentation/PLAN_PRESENTATION.md` : Conducteur minuté de séance style Devoxx / Ch'tiJUG.
-  - `presentation/SLIDES.md` : Diapositives complètes au format Marp / Markdown.
-  - `presentation/QUIZ_KAHOOT.md` : Quiz interactif de 5 questions avec explications didactiques.
-
-### Étape 4 : Épuration Intégrale du Dépôt GitLab (Assainissement Anti-Traces)
-- Suppression définitive de `JOURNAL_DE_BORD.md` du dépôt GitLab (conservé exclusivement sur GitHub).
-- Nettoyage du `README.md` pour retirer tout lien vers GitHub ou mentions d'assistance.
-- Nettoyage de `docs/RAPPORT_SYNTHESE.md` pour se concentrer sur l'ingénierie logicielle.
-- Scan automatisé par expression régulière confirmant **zéro occurrence de mots-clés IA / agent / prompt / github** dans l'arborescence GitLab.
-- Commit et synchronisation sur `git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`.
+  - `docker-compose.yml` : Configuration PostgreSQL 16 conteneurisée partagée.
+  - `.gitlab-ci.yml` : Pipeline d'intégration continue GitLab.
+  - `docs/SPECIFICATIONS.md` : Cahier des charges fonctionnel complet.
+  - `docs/ARCHITECTURE.md` : Modèle de données MCD et conventions d'architecture.
+- Scan lexical exhaustif validant **zéro trace ou mention d'IA/agent/GitHub**.
+- Commit et push propre :
+  `7c8da56 Initial commit` -> `4668f1f feat: initialisation de l'environnement, specifications et architecture`.
