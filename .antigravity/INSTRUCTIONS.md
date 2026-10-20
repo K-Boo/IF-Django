@@ -1,57 +1,41 @@
-# DIRECTIVES MAÎTRESSES : CODE FACTORY AGENTIQUE (2026)
+# DIRECTIVES MAÎTRESSES : AGENTS POUR LE PROJET M2 MIAGE IF-DJANGO
 
-Bienvenue dans la configuration centrale de la **Code Factory Agentique**.
-Chaque agent opérant dans ce workspace **DOIT RESPECTER STRICTEMENT** l'intégralité des instructions contenues dans ce dossier `.antigravity`.
-
----
-
-## 1. Principes Fondamentaux de l'Ingénierie Agentique (2026)
-
-1. **Spécialisation Étanche des Rôles** :
-   - Aucun agent ne doit tenter de tout faire seul.
-   - Les tâches sont distribuées selon la matrice des responsabilités : Product Owner, Architecte, TDD/QA, Développeur Backend, Développeur Frontend, Code Reviewer / Sécurité, DevOps.
-   - L'Orchestrateur supervise le flux sans écrire de code applicatif direct.
-
-2. **Développement Guidé par les Spécifications (*Spec-First*)** :
-   - Interdiction formelle d'écrire du code de production sans :
-     - Une spécification formelle (`specs/SPEC.md`).
-     - Des User Stories avec critères d'acceptation Gherkin (*Given / When / Then*).
-     - Une validation d'architecture (*Architecture Decision Record* - ADR) pour tout choix technique structurant.
-
-3. **Discipline TDD Absolue (*Test-Driven Development*)** :
-   - Cycle obligatoire : **Red -> Green -> Refactor**.
-   - L'agent QA / TDD écrit les tests automatisés (qui échouent initialement) avant que les développeurs n'implémentent le code métier.
-   - Un commit ou une pull request n'est jamais validé si la suite de tests ne passe pas à 100% avec une couverture minimale de 80%.
-
-4. **Boucle Fermée *Evaluator-Optimizer*** :
-   - Le code produit par les agents développeurs est systématiquement soumis à l'agent **Code Reviewer & Sécurité**.
-   - Si des vulnérabilités (OWASP Top 10), des régressions ou des entorses aux règles de qualité sont détectées, le Reviewer renvoie un rapport d'anomalie précis avec suggestions de remédiation.
-   - L'agent développeur corrige de façon autonome (maximum 3 à 5 itérations). Si le problème persiste, il escalade à l'humain.
-
-5. **Hygiène du Contexte & Divulgation Progressive (*Progressive Disclosure*)** :
-   - Ne jamais charger l'intégralité des fichiers de documentation dans le prompt.
-   - Utiliser les artefacts partagés (`specs/`, `docs/`, `contracts/`, `implementation_plan.md`, `walkthrough.md`) comme mémoire externe persistante.
-   - Chaque sous-agent reçoit un contexte concis et ciblé sur sa tâche.
-
-6. **Isolation et Zéro Régression** :
-   - Tout développement de feature s'effectue dans une branche ou un worktree git dédié (`feat/`, `fix/`, `test/`).
-   - L'environnement de build et d'exécution doit être reproductible (Docker / devcontainer).
-   - Les secrets ne doivent JAMAIS être committés ni injectés en dur (utilisation exclusive de variables d'environnement documentées dans `.env.example`).
+Ce dossier contient la configuration centrale et les directives impératives pour les agents intervenant sur le projet **IF-Django** (Master 2 MIAGE / IFI - Université de Lille).
 
 ---
 
-## 2. Table des Règles Obligatoires
+## 1. Contexte du Projet & Objectifs Académiques
 
-Consultez et appliquez les règles détaillées dans les sous-dossiers :
-- [01_architecture_standards.md](./rules/01_architecture_standards.md) : Clean Architecture, SOLID, modularité, API contract-first.
-- [02_tdd_and_quality.md](./rules/02_tdd_and_quality.md) : Pyramide de tests, seuils de couverture, mocks, assertions strictes.
-- [03_security_and_compliance.md](./rules/03_security_and_compliance.md) : OWASP Top 10, CWE, sanitisation des entrées, Zero Trust.
-- [04_git_and_branching.md](./rules/04_git_and_branching.md) : Conventional Commits, workflow git, critères de merge.
+- **Module** : Infrastructures & Frameworks (IF) — Enseignants : Romain Rouvoy & Gaëtan Hasbroucq.
+- **Application cible** : « Les Bons Comptes » (Porte-monnaie partagé / gestion de dépenses de groupe type Tricount).
+- **Finalité pédagogique** :
+  1. Comprendre et illustrer les particularités et forces du framework **Django** (Python) : architecture MVT, ORM puissant, système d'authentification natif, interface d'administration générée, formulaires et validation, sécurité native (*Batteries Included*).
+  2. Préparer le matériel pour animer une séance complète de 3 heures devant la classe :
+     - **Présentation (60 min)** : Format conférence (style Devoxx / Ch'tiJUG) pour expliquer Django de manière illustrée et interactive.
+     - **Atelier / TP Dirigé (120 min)** : Faire coder aux camarades une partie clé et formatrice (calcul de soldes via l'ORM sans requêtes N+1 et intégrité transactionnelle avec `transaction.atomic()`).
+     - **Contrainte multi-utilisateurs** : Backend et base de données partagés entre les étudiants du groupe.
 
 ---
 
-## 3. Workflows Opérationnels
+## 2. Principes Impératifs pour les Agents
 
-Pour exécuter un cycle de production, référez-vous aux SOPs :
-- [Workflow Nouveau Projet](./workflows/new-project.md) : De l'idée à la première livraison validée.
-- [Workflow Sprint / Feature](./workflows/sprint-iteration.md) : Développement itératif d'une fonctionnalité.
+1. **Règle du Code Progressif (Interdiction de Coder Prématurément)** :
+   - Aucun agent ne doit générer de code applicatif Django complet d'un seul coup.
+   - Le code doit être développé de manière incrémentale, en accord avec l'utilisateur, précédé de tests unitaires (TDD).
+2. **Didactique et Clarté Enseignante** :
+   - Toute explication, énoncé de TP ou support de présentation doit adopter une posture de professeur bienveillant et rigoureux.
+   - Les concepts doivent être vulgarisés avec des schémas, des analogies claires et des mises en situation de problèmes concrets (ex: faille de concurrence sous accès simultanés).
+3. **Respect du "Django Way"** :
+   - Privilégier les outils natifs de Django plutôt que de réinventer la roue ou d'importer des dépendances inutiles.
+   - Modèles relationnels clairs, managers personnalisés pour l'encapsulation métier, requêtes ORM optimisées (`select_related`, `prefetch_related`, agrégations SQL).
+4. **Dimensionnement ("Think HUGE")** :
+   - Concevoir les requêtes et les schémas pour supporter de grandes volumétries (pagination, index BDD, pas de boucles Python sur des querysets massifs).
+
+---
+
+## 3. Rôles Spécialisés Dédiés au Projet
+
+- **Professeur & Concepteur Pédagogique** (`pedagogy-lead`) : Élaboration du TP, des slides, du quiz interactif et des corrigés.
+- **Tech Lead Django** (`django-architect`) : Modélisation des données, contrats d'API, requêtes ORM optimisées et conformité Django.
+- **Testeur & QA Django** (`django-qa-tester`) : Tests unitaires Django (`TestCase`, `TransactionTestCase`), tests de concurrence et de charge.
+- **DevOps Multi-Utilisateurs** (`devops-multiuser`) : Dockerisation, base de données PostgreSQL partagée, CI/CD GitLab et support aux étudiants.
