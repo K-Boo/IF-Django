@@ -3,7 +3,7 @@
 Ce dépôt héberge la **configuration d'assistance agentique** spécialement paramétrée pour le projet universitaire **Infrastructures & Frameworks (IF-Django)** — Master 2 MIAGE / IFI (Université de Lille).
 
 **Dépôt GitHub** : `git@github.com:K-Boo/IF-Django.git`  
-**Dépôt Académique Associé (GitLab)** : `git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`  
+**Dépôt Académique Associé (GitLab)** : `git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django-2026.git` (`https://gitlab.univ-lille.fr/khalil.bouchama.etu/if-django-2026`)  
 **Journal de Bord** : [`JOURNAL_DE_BORD.md`](./JOURNAL_DE_BORD.md)
 
 ---

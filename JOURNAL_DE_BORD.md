@@ -5,7 +5,7 @@
 **Technologie** : Django (Python)  
 **Sujet d'Application** : « Les Bons Comptes » (Porte-monnaie partagé / gestion de dépenses de groupe)  
 **Dépôt Agentique (GitHub Privé)** : `git@github.com:K-Boo/IF-Django.git`  
-**Dépôt Académique & Code (GitLab Univ-Lille)** : `git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django.git`  
+**Dépôt Académique & Code (GitLab Univ-Lille)** : `git@gitlab-ssh.univ-lille.fr:khalil.bouchama.etu/if-django-2026.git` (`https://gitlab.univ-lille.fr/khalil.bouchama.etu/if-django-2026`)  
 **Date d'Initialisation** : 20 Octobre 2026  
 
 ---
@@ -69,3 +69,21 @@
 - Rédaction de [`docs/SUIVI_AVANCEMENT.md`](file:///C:/Users/hpome/Documents/M2_MIAGE/IF-Django/docs/SUIVI_AVANCEMENT.md) : Registre de synchronisation permettant à chaque membre et son agent de connaître l'état précis des dépendances et contrats disponibles.
 - Scan d'intégrité (0 terme suspect) et publication sur GitLab :
   `8418f56 docs(team): plan de repartition du travail en 3 parties et tableau de suivi`.
+
+### Étape 5 : Réalisation, Livraison et Validation du Volet 1 (`apps.accounts` & `apps.wallets`)
+- **Dépôt officiel académique GitLab** : `https://gitlab.univ-lille.fr/khalil.bouchama.etu/if-django-2026`
+- **Application `apps.accounts` achevée** :
+  - Modèle utilisateur personnalisé `User(AbstractUser)` avec `email` unique (`AUTH_USER_MODEL = "accounts.User"`).
+  - Vues d'inscription, de connexion et profil utilisateur francisées avec gabarits épurés.
+- **Application `apps.wallets` achevée** :
+  - Modèle `Wallet` avec clé primaire UUID4 non prédictible, devises, statuts (`OUVERT` / `CLOS`), créateur.
+  - Modèle `WalletMembership` avec rôles (`ADMIN` / `MEMBRE`), statuts d'invitation (`INVITE`, `ACCEPTE`, `REFUSE`), et contrainte d'unicité `unique_wallet_membership`.
+  - Vues et logique métier complètes : création transactionnelle (`transaction.atomic`), tableau de bord des cagnottes, système d'invitations avec vérification de permissions (`PermissionDenied`), vues d'acceptation et de refus.
+  - Gabarits HTML responsives et stylisés (`base.html`, `wallet_list.html`, `wallet_detail.html`, `wallet_form.html`, `wallet_invite.html`).
+- **Assurance qualité & Intégration continue** :
+  - Configuration de `flake8` et intégration des tests unitaires Django (`TestCase`).
+  - Validation des commits selon la convention `Conventional Commits` (ex: `3cbebcf`, `92ad133`, `7787449`, `696ec45`).
+- **Validation du contrat d'interface pour le Membre 2 (`apps.expenses`)** :
+  - Les modèles `User` et `Wallet` sont testés et disponibles sur la branche `main` pour brancher `Expense` et `ExpenseShare`.
+  - Recommandations transmises pour l'intégration : routage par `<uuid:wallet_id>`, clé `PROTECT` sur le payeur, et filtrage des participants sur `WalletMembership.Status.ACCEPTED`.
+
