@@ -87,3 +87,37 @@
   - Les modèles `User` et `Wallet` sont testés et disponibles sur la branche `main` pour brancher `Expense` et `ExpenseShare`.
   - Recommandations transmises pour l'intégration : routage par `<uuid:wallet_id>`, clé `PROTECT` sur le payeur, et filtrage des participants sur `WalletMembership.Status.ACCEPTED`.
 
+
+### Étape 6 : Réalisation, Livraison et Validation du Volet 2 (`apps.expenses`)
+- **Auteur & Responsable du volet** : Membre 2 (Gautam Demeulemeester)
+- **Application `apps.expenses` entièrement développée et intégrée** :
+  - **Modélisation relationnelle & Intégrité financière** :
+    - Modèle `Expense` : titre, montant `DecimalField(max_digits=10, decimal_places=2)` avec `MinValueValidator(Decimal("0.01"))`, date, clé étrangère vers `Wallet` (`CASCADE`), et clé `PROTECT` sur le payeur `User` (sécurité interdisant la suppression d'un compte avec des créances en cours).
+    - Modèle `ExpenseShare` : quote-part de dépense avec contrainte d'unicité `UniqueConstraint(fields=["expense", "user"])`.
+    - Migration initiale `0001_initial.py` générée et appliquée.
+    - Administration Django complète (`admin.py`) avec `ExpenseAdmin`, filtres, recherche et `ExpenseShareInline` (`TabularInline`).
+  - **Formulaire de saisie & Répartition équitable (`forms.py`)** :
+    - `ExpenseForm` : filtrage dynamique des payeurs et bénéficiaires restreint aux membres actifs acceptés du porte-monnaie courant.
+    - Algorithme de répartition en centimes entiers avec redistribution unitaire du centime résiduel ($\sum \text{parts} = \text{montant}$ au centime près, sans perte ni dérive flottante).
+  - **Vues métier & Sécurité d'accès (`views.py` & `urls.py`)** :
+    - Vue `expense_create` sous transaction atomique ACID (`with transaction.atomic():`).
+    - Vue `expense_delete` décorée avec `@require_POST`, appliquant le contrôle d'accès strict spécifié : suppression réservée au payeur de la dépense ou au créateur du porte-monnaie (levée de `PermissionDenied` HTTP 403 sinon).
+    - Verrouillage automatique : interdiction d'ajouter ou supprimer des dépenses si le porte-monnaie est clos (`Wallet.Status.CLOSED`).
+  - **Calcul des soldes nets & Optimisation ORM (« Think HUGE ») (`services.py`)** :
+    - `get_wallet_total(wallet)` : total du pot calculé en 1 seule requête SQL via agrégation `Sum("amount")` et `Coalesce`.
+    - `get_members_balances(wallet)` : calcul des soldes nets individuels ($Total Payé - Total Dû$) par doubles agrégations SQL `GROUP BY` (`values().annotate(Sum())`), garantissant un nombre constant de requêtes (zéro requête N+1).
+    - Optimisation de la vue `wallet_detail` par l'ajout de `.prefetch_related("expenses__payer", "expenses__shares")`.
+  - **Algorithme de dette glouton (`compute_settlement_plan`)** :
+    - Algorithme de type *Cash Flow Minimization* (similaire à Splitwise / Tricount) associant à chaque itération le plus gros débiteur avec le plus gros créancier.
+    - Minimisation du nombre de virements bancaires pour solder intégralement la cagnotte.
+  - **Gabarits HTML & Expérience utilisateur** :
+    - `expense_form.html` : formulaire de saisie ergonomique avec sélection des bénéficiaires.
+    - `balances.html` : tableau de bord des soldes individuels avec badges colorés (créditeur, débiteur, équilibré) et cartes visuelles des virements recommandés.
+    - Intégration dans `wallet_detail.html` : historique chronologique des dépenses, total engagé, bouton de suppression sécurisé et accès direct aux soldes.
+  - **Tests unitaires automatisés & CI/CD (`tests.py`)** :
+    - 11 tests unitaires couvrant les modèles, la protection `PROTECT`, les contraintes d'unicité, la précision des centimes résiduels, les calculs de soldes, l'algorithme glouton, les permissions HTTP 403 et le blocage sur cagnotte close.
+    - Pipeline GitLab CI/CD 100% vert (jobs `lint` `flake8` à 0 anomalie et jobs `test` passants).
+- **Contrats et objets désormais disponibles pour débloquer le Membre 3** :
+  - L'application `apps.expenses` est stabilisée et déployée sur la branche `main`.
+  - Les calculs de balances et le modèle `Expense` sont prêts pour l'implémentation de la fonction de clôture sécurisée (`close_wallet_safely` avec `select_for_update()`).
+  - Le banc de tests est prêt pour l'intégration des tests de charge multithreadés de concurrence (`TransactionTestCase`).
