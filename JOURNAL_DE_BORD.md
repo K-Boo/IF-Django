@@ -121,3 +121,16 @@
   - L'application `apps.expenses` est stabilisée et déployée sur la branche `main`.
   - Les calculs de balances et le modèle `Expense` sont prêts pour l'implémentation de la fonction de clôture sécurisée (`close_wallet_safely` avec `select_for_update()`).
   - Le banc de tests est prêt pour l'intégration des tests de charge multithreadés de concurrence (`TransactionTestCase`).
+
+### Étape 7 : Stabilisation de l'Environnement d'Exécution & Parité Dev/Prod (Python 3.12)
+- **Constat & Analyse Technique** :
+  - Détection d'une incompatibilité amont entre CPython 3.14.0 et Django 5.1.15 lors de la duplication de contexte de template (`BaseContext.__copy__` et `copy(super())`), provoquant une `AttributeError` sur le formulaire d'ajout d'utilisateur `/admin/accounts/user/add/`.
+- **Décision d'Ingénierie Logicielle (Best Practice)** :
+  - Rejet formel de la dette technique liée à un *monkey-patching* local dans le code applicatif.
+  - Application stricte du principe de parité Dev/Prod (*Twelve-Factor App, Factor X*) : alignement de l'environnement local de développement sur la version de référence certifiée dans le pipeline GitLab CI (`python:3.12-slim`).
+- **Actions Réalisées & Déploiement** :
+  - Installation de Python 3.12.10 via `winget`.
+  - Reconfiguration complète de l'environnement virtuel `.venv` sous Python 3.12.
+  - Réinstallation et vérification de l'ensemble des dépendances (`requirements.txt`).
+  - Validation complète : 12 tests unitaires passants en 10.7s, interface d'administration `/admin/accounts/user/add/` nativement opérationnelle en HTTP 200 sans altération du code applicatif Django.
+  - Normalisation de l'environnement via l'ajout du fichier standard `.python-version` fixé à `3.12` sur GitLab (`fe7f7a8`).
