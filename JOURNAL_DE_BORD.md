@@ -134,3 +134,35 @@
   - Réinstallation et vérification de l'ensemble des dépendances (`requirements.txt`).
   - Validation complète : 12 tests unitaires passants en 10.7s, interface d'administration `/admin/accounts/user/add/` nativement opérationnelle en HTTP 200 sans altération du code applicatif Django.
   - Normalisation de l'environnement via l'ajout du fichier standard `.python-version` fixé à `3.12` sur GitLab (`fe7f7a8`).
+
+### Étape 8 : Réalisation Intégrale du Volet 3 (Clôture, Remboursements, Scalabilité & Export CSV)
+- **Objectif Pédagogique & Ingénierie** :
+  - Compléter les fonctionnalités finales de l'application selon les exigences formelles du sujet d'examen : clôture sécurisée du porte-monnaie, apurement des dettes via enregistrement de remboursements simulés, passage à l'échelle (*Think HUGE*) et exportation des données.
+  - Rédaction d'un guide pédagogique complet (`docs/VOLET_3_GUIDE_PEDAGOGIQUE.md`) détaillant chaque concept théorique (B-Tree, Paginator, ACID, Streaming HTTP, BOM UTF-8) sur le dépôt privé GitHub.
+- **Réalisations Étape par Étape** :
+  1. **Étape 1 — Clôture & Verrouillage du porte-monnaie** :
+     - Vue `wallet_close` décorée de `@login_required`, `@require_POST` et encapsulée dans `transaction.atomic()`.
+     - Contrôle d'accès strict : réservé au créateur ou à l'administrateur du pot (erreur 403 sinon).
+     - Idempotence garantie : si déjà clos, notification d'avertissement sans erreur 500.
+     - Interface : bouton rouge avec confirmation JavaScript et bandeau d'alerte scellé.
+     - 4 tests unitaires dédiés (`WalletClosingTests`).
+  2. **Étape 2 — Rembourser (mock) & Apurement des dettes** :
+     - Modèle `Reimbursement` (sender, receiver, amount, created_at) avec migration `0002_reimbursement.py` et interface Django Admin.
+     - Moteur de calcul : agrégation SQL directe des flux de remboursement dans `get_members_balances`, neutralisant immédiatement les dettes dans le plan glouton.
+     - Vues `reimbursement_create` et `reimbursement_delete` sous transactions atomiques.
+     - Interface : bouton 1-clic `✓ Rembourser (mock)` dans `balances.html` et historique détaillé des remboursements effectués avec possibilité d'annulation.
+     - 4 tests unitaires dédiés (`ReimbursementTests`).
+  3. **Étape 3 — Scalabilité « Think HUGE » (Indexation SQL & Pagination Django)** :
+     - Index composites en base de données (`models.Index`) sur `Expense` (`[wallet, -expense_date, -created_at]`, `[payer]`) et `Reimbursement` (`[wallet, -created_at]`, `[sender]`, `[receiver]`) via la migration `0003_expense_expense_wallet_date_idx_and_more.py`.
+     - Intégration de `django.core.paginator.Paginator` (10 dépenses par page) avec navigation dynamique (`?page=X`) et évaluation SQL paresseuse (`LIMIT/OFFSET`).
+     - 3 tests unitaires dédiés (`WalletPaginationTests`).
+  4. **Étape 4 — Exportation CSV & Support Microsoft Excel** :
+     - Vue `wallet_export_csv` générant à la volée le bilan complet (métadonnées, dépenses, soldes nets, remboursements).
+     - Streaming HTTP via `HttpResponse(content_type="text/csv; charset=utf-8")` avec en-tête `Content-Disposition`.
+     - Injection du BOM UTF-8 (`\ufeff`) pour compatibilité immédiate avec Microsoft Excel sous Windows et séparateur point-virgule (`;`).
+     - Boutons d'export CSV intégrés dans `wallet_detail.html` et `balances.html`.
+     - 3 tests unitaires dédiés (`WalletExportCSVTests`).
+- **Validation Qualité & Métriques Finales** :
+  - **Tests unitaires** : **26 tests réussis sur 26 (100% de succès)**.
+  - **Style & Normes** : 0 erreur Flake8, formatage Black 100% propre.
+  - **GitLab Univ-Lille** : 3 commits modulaires signés sous `Khalil Bouchama <khalil.bouchama.etu@univ-lille.fr>`.
