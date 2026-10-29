@@ -138,3 +138,132 @@ Pour respecter la rigueur logicielle du Master MIAGE, 4 tests unitaires couvrent
 - **Flake8** : 0 erreur de style ou de convention PEP 8.
 - **Tests unitaires Django** : 16 tests passants sur 16 (100% de réussite).
 - **Git** : Commit traçable `feat(wallets): cloture securisee du porte-monnaie et verrouillage metier` poussé sur GitLab Univ-Lille.
+
+---
+
+## 💸 Étape 2 : Gestion des Remboursements Fictifs (« Rembourser (mock) »)
+
+### 1. La Situation-Problème & Objectif Métier
+L'énoncé officiel du sujet stipule textuellement :
+> *« Bonus : Calculer qui donne combien à qui (en minimisant les virements) »*  
+> *« Rembourser (mock) »*
+
+Jusqu'à présent, l'application calculait le plan optimal de remboursement (ex: « Bob doit verser 25.00 EUR à Alice »), mais **les membres n'avaient aucun moyen d'indiquer qu'ils avaient réglé leur dette** !  
+Résultat : les dettes restaient indéfiniment affichées, même après que Bob ait fait son virement bancaire à Alice.
+
+**L'objectif de l'Étape 2** :
+1. Permettre d'enregistrer un virement / remboursement (réel ou fictif/mock) en un clic depuis le tableau de bord des soldes.
+2. Déduire immédiatement ce remboursement du solde net des deux membres.
+3. Mettre à jour en temps réel l'algorithme glouton (si Bob règle l'intégralité de sa dette à Alice, la transaction disparaît du plan et les deux comptes tombent à 0.00 EUR).
+4. Conserver un historique complet et traçable des règlements déjà effectués avec possibilité d'annulation si nécessaire.
+
+---
+
+### 2. Fonctionnement Technique Détaillé du Code Implémenté
+
+#### A. Le Modèle `Reimbursement` (`src/apps/expenses/models.py`)
+```python
+class Reimbursement(models.Model):
+    wallet = models.ForeignKey(
+        "wallets.Wallet",
+        on_delete=models.CASCADE,
+        related_name="reimbursements",
+        verbose_name="Porte-monnaie",
+    )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reimbursements_sent",
+        verbose_name="Emetteur (payeur)",
+    )
+    receiver = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reimbursements_received",
+        verbose_name="Destinataire (beneficiaire)",
+    )
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        verbose_name="Montant rembourse",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Date du reglement",
+    )
+```
+- **Relation bilatérale propre** : deux clés étrangères vers `User` (`sender` qui donne l'argent, `receiver` qui le reçoit) reliées à la cagnotte (`wallet`).
+- **Sécurité décimale** : `DecimalField(10, 2)` avec validateur positif (`MinValueValidator(0.01)`), évitant toute anomalie de montant nul ou négatif.
+
+---
+
+#### B. Intégration dans le Moteur de Calcul des Soldes (`src/apps/expenses/services.py`)
+Pour ne pas introduire de requêtes N+1 et respecter le principe *« Think HUGE »*, les remboursements sont agrégés directement par le SGBD :
+```python
+# 1. Total des remboursements émis par utilisateur (1 requête SQL GROUP BY)
+reimb_sent_aggs = (
+    Reimbursement.objects.filter(wallet=wallet)
+    .values("sender_id")
+    .annotate(total_sent=Sum("amount"))
+)
+
+# 2. Total des remboursements reçus par utilisateur (1 requête SQL GROUP BY)
+reimb_recv_aggs = (
+    Reimbursement.objects.filter(wallet=wallet)
+    .values("receiver_id")
+    .annotate(total_recv=Sum("amount"))
+)
+
+# 3. Formule mathématique exacte du solde net
+paid = total_depenses_payees + total_remboursements_emis
+share = total_depenses_consommees + total_remboursements_recus
+net_balance = paid - share
+```
+
+##### La Beauté Mathématique du Système :
+Prenons l'exemple où Alice a avancé 100 EUR pour Alice et Bob (50 EUR chacun) :
+- **Avant remboursement** :
+  - Alice : a payé 100, consommé 50 $ightarrow$ Solde = **+50 EUR** (Créditrice).
+  - Bob : a payé 0, consommé 50 $ightarrow$ Solde = **-50 EUR** (Débiteur).
+- **Bob clique sur « Rembourser (mock) » de 50 EUR** :
+  - Bob a émis 50 EUR $ightarrow$ son `paid` passe à 50 EUR. Solde = $50 - 50 =$ **0.00 EUR** !
+  - Alice a reçu 50 EUR $ightarrow$ sa créance est compensée. Solde = $100 - (50 + 50) =$ **0.00 EUR** !
+- Les deux membres sont instantanément quittes, et le plan de remboursement se vide automatiquement !
+
+---
+
+#### C. Les Vues Métier (`src/apps/expenses/views.py`)
+1. **`reimbursement_create(request, wallet_id)`** :
+   - Décorée avec `@login_required` et `@require_POST`.
+   - Contrôle d'accès : vérifie que l'émetteur et le destinataire sont tous deux membres actifs du porte-monnaie.
+   - Validation stricte : interdit de se rembourser soi-même (`from_user != to_user`) et valide le montant sous `transaction.atomic()`.
+2. **`reimbursement_delete(request, reimbursement_id)`** :
+   - Permet d'annuler un remboursement en cas d'erreur de saisie.
+   - Contrôle d'accès : réservé à l'émetteur, au destinataire ou à l'administrateur du pot.
+
+---
+
+#### D. L'Interface Utilisateur ([`templates/expenses/balances.html`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/if-django-2026/src/templates/expenses/balances.html))
+1. **Bouton d'action directe 1-clic** :
+   Dans le tableau des virements suggérés, un bouton vert **« ✓ Rembourser (mock) »** permet de solder une ligne en un clic avec pré-remplissage automatique des montants et des comptes.
+2. **Section « Historique des Remboursements Effectués »** :
+   Une nouvelle carte récapitule chronologiquement l'ensemble des paiements validés, la date exacte, les acteurs concernés et un bouton pour annuler un remboursement si besoin.
+
+---
+
+### 3. Les Tests Automatisés Dédiés (`ReimbursementTests`)
+
+4 nouveaux tests unitaires complets couvrent l'intégralité du cycle de vie des remboursements :
+1. **`test_reimbursement_updates_net_balances_and_plan`** : Vérifie qu'un remboursement compense rigoureusement la dette, amène les soldes à 0.00 EUR et vide le plan d'apurement glouton.
+2. **`test_reimbursement_non_member_forbidden`** : Prouve qu'un utilisateur extérieur est refoulé avec une erreur HTTP 403 Forbidden.
+3. **`test_reimbursement_self_forbidden`** : Prouve qu'une tentative d'auto-remboursement est rejetée sans créer d'enregistrement en base.
+4. **`test_reimbursement_delete_restores_debt`** : Vérifie que l'annulation d'un remboursement restaure immédiatement la dette initiale et réinjecte la ligne dans le plan glouton.
+
+---
+
+### 4. Bilan Qualité
+- **Flake8** : 0 erreur de style ou de convention PEP 8.
+- **Tests unitaires Django** : **20 tests passants sur 20** (100% de réussite).
+- **GitLab** : Commit traçable `feat(expenses): modelisation et enregistrement des remboursements simules` (`ea6864f`) poussé sur la branche `main`.
+
