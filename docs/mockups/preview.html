@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquette Interactive — Les Bons Comptes (Refonte UI/UX)</title>
+    <!-- Police Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette OKLCH - Les Bons Comptes */
+            --bg-canvas: #f8fafc;
+            --surface-card: #ffffff;
+            --surface-raised: #f1f5f9;
+            --surface-subtle: #f8fafc;
+            --border-subtle: #e2e8f0;
+            --border-strong: #cbd5e1;
+            
+            --slate-dark: #0f172a;
+            --slate-muted: #64748b;
+            --slate-light: #94a3b8;
+            
+            /* Émeraude Trésorerie (Accent Solvabilité & Action) */
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-light: #ecfdf5;
+            --primary-border: #a7f3d0;
+            --primary-text: #065f46;
+            
+            /* Corail Dettes / Alertes */
+            --debtor: #e11d48;
+            --debtor-light: #fff1f2;
+            --debtor-border: #fecdd3;
+            --debtor-text: #9f1239;
+
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--slate-dark);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabular {
+            font-variant-numeric: tabular-nums lining-nums;
+            letter-spacing: -0.02em;
+        }
+
+        /* Barre supérieure de prévisualisation (Barre de commande des maquettes) */
+        .mockup-toolbar {
+            background-color: var(--slate-dark);
+            color: white;
+            padding: 0.65rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .mockup-switcher {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem;
+            border-radius: var(--radius-md);
+        }
+
+        .mockup-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 0.4rem 0.85rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .mockup-btn.active {
+            background: white;
+            color: var(--slate-dark);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Navbar de l'application */
+        .navbar {
+            background-color: var(--surface-card);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--slate-dark);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), #047857);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.25);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.35rem 0.75rem;
+            background: var(--surface-raised);
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .user-avatar {
+            width: 26px;
+            height: 26px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Layout Container */
+        .app-container {
+            max-width: 1140px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        /* Boutons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.1rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 1px 3px rgba(5, 150, 105, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--slate-dark);
+            border-color: var(--border-subtle);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--surface-raised);
+            border-color: var(--border-strong);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-open {
+            background-color: var(--primary-light);
+            color: var(--primary-text);
+            border: 1px solid var(--primary-border);
+        }
+
+        .badge-creditor {
+            background-color: var(--primary-light);
+            color: var(--primary-text);
+            border: 1px solid var(--primary-border);
+        }
+
+        .badge-debtor {
+            background-color: var(--debtor-light);
+            color: var(--debtor-text);
+            border: 1px solid var(--debtor-border);
+        }
+
+        /* Cartes & Composants */
+        .card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        /* --- SCREEN 1: DASHBOARD --- */
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem 2.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hero-banner::after {
+            content: "";
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+        }
+
+        .hero-subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .hero-metric-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: right;
+        }
+
+        .hero-metric-label {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-metric-val {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #34d399; /* Émeraude clair */
+            margin-top: 0.15rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--slate-dark);
+        }
+
+        .wallets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .wallet-card {
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            background: white;
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .wallet-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.85rem;
+        }
+
+        .wallet-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--slate-dark);
+            text-decoration: none;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .wallet-card-title:hover {
+            color: var(--primary);
+        }
+
+        .wallet-card-desc {
+            font-size: 0.85rem;
+            color: var(--slate-muted);
+            margin-bottom: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .wallet-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .avatar-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--surface-raised);
+            color: var(--slate-dark);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-left: -8px;
+        }
+
+        .avatar-circle:first-child {
+            margin-left: 0;
+        }
+
+        /* --- SCREEN 2: DÉTAIL D'UN POT PAR ONGLETS --- */
+        .detail-hero {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 1.75rem 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .detail-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .detail-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            color: var(--slate-muted);
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-link {
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--slate-muted);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .tab-link:hover {
+            color: var(--slate-dark);
+        }
+
+        .tab-link.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Liste de dépenses */
+        .expense-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .expense-row {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: border-color 0.15s;
+        }
+
+        .expense-row:hover {
+            border-color: var(--border-strong);
+        }
+
+        .expense-main {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .category-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--surface-raised);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .expense-title {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: var(--slate-dark);
+        }
+
+        .expense-sub {
+            font-size: 0.8rem;
+            color: var(--slate-muted);
+            margin-top: 0.15rem;
+        }
+
+        .expense-amount {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--slate-dark);
+            text-align: right;
+        }
+
+        .expense-share {
+            font-size: 0.75rem;
+            color: var(--slate-muted);
+            margin-top: 0.1rem;
+        }
+
+        /* Cartes de remboursement (Dettes) */
+        .debt-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .debt-card {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .debt-flow {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .debt-arrow {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+            background: white;
+            border: 1px dashed var(--border-strong);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 1.25rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+        }
+
+        .empty-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--slate-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .empty-desc {
+            font-size: 0.88rem;
+            color: var(--slate-muted);
+            max-width: 420px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .hero-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.25rem;
+                padding: 1.5rem;
+            }
+            .hero-metric-card {
+                text-align: left;
+                width: 100%;
+            }
+            .detail-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre de Contrôle de la Maquette -->
+    <div class="mockup-toolbar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-weight: 700; color: #34d399;">● MAQUETTE UI/UX</span>
+            <span style="color: #64748b;">|</span>
+            <span>Refonte « Les Bons Comptes » (Anti-Slop & SOLID)</span>
+        </div>
+        <div class="mockup-switcher">
+            <button class="mockup-btn active" onclick="switchScreen('dashboard')">1. Mes Cagnottes (Dashboard)</button>
+            <button class="mockup-btn" onclick="switchScreen('detail')">2. Détail Cagnotte (Onglets)</button>
+            <button class="mockup-btn" onclick="switchScreen('balances')">3. Soldes & Dettes</button>
+            <button class="mockup-btn" onclick="switchScreen('empty')">4. État Vide (Empty State)</button>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <a href="#" class="brand">
+            <div class="brand-icon">✓</div>
+            Les Bons Comptes
+        </a>
+        <div class="nav-actions">
+            <a href="#" class="btn btn-outline btn-sm">Mes Cagnottes</a>
+            <div class="user-pill">
+                <div class="user-avatar">K</div>
+                <span>khalil.bouchama</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="app-container">
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 1 : DASHBOARD (LISTE DES CAGNOTTES)      -->
+        <!-- ============================================== -->
+        <section id="screen-dashboard">
+            <div class="hero-banner">
+                <div>
+                    <h1 class="hero-title">Bonjour, Khalil 👋</h1>
+                    <p class="hero-subtitle">Vous participez actuellement à 3 cagnottes actives.</p>
+                </div>
+                <div class="hero-metric-card">
+                    <div class="hero-metric-label">Position Nette Globale</div>
+                    <div class="hero-metric-val tabular">+ 42,50 €</div>
+                    <div style="font-size: 0.75rem; color: #a7f3d0; margin-top: 0.2rem;">On vous doit de l'argent</div>
+                </div>
+            </div>
+
+            <!-- Invitations en attente -->
+            <div style="margin-bottom: 2rem;">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        Invitations reçues
+                        <span class="badge badge-open" style="font-size: 0.75rem; margin-left: 0.4rem;">1 en attente</span>
+                    </h2>
+                </div>
+                <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--primary);">
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 700;">Anniversaire Thomas 🎂</h3>
+                        <p style="font-size: 0.85rem; color: var(--slate-muted); margin-top: 0.2rem;">
+                            Invité par <strong>abdelkader.h</strong> • Devise : EUR (€)
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 0.65rem;">
+                        <button class="btn btn-primary btn-sm">Accepter</button>
+                        <button class="btn btn-outline btn-sm" style="color: var(--debtor);">Refuser</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cagnottes Actives -->
+            <div>
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Cagnottes en Cours</h2>
+                        <p style="font-size: 0.85rem; color: var(--slate-muted);">Dépenses partagées et voyages de groupe</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchScreen('detail')">
+                        + Créer une cagnotte
+                    </button>
+                </div>
+
+                <div class="wallets-grid">
+                    <!-- Carte 1 -->
+                    <div class="wallet-card">
+                        <div>
+                            <div class="wallet-card-header">
+                                <span class="badge badge-open">Ouvert</span>
+                                <span class="tabular" style="font-weight: 700; color: var(--primary); font-size: 0.88rem;">+ 28,00 €</span>
+                            </div>
+                            <a href="#" class="wallet-card-title" onclick="switchScreen('detail')">Vacances Barcelone 2026 🌴</a>
+                            <p class="wallet-card-desc">Location Airbnb, courses et billets pour le groupe d'amis.</p>
+                        </div>
+                        <div class="wallet-card-footer">
+                            <div class="avatar-group">
+                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
+                                <div class="avatar-circle" style="background: #fef3c7; color: #b45309;">A</div>
+                                <div class="avatar-circle" style="background: #f3e8ff; color: #7e22ce;">G</div>
+                                <div class="avatar-circle" style="font-size: 0.65rem;">+2</div>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="switchScreen('detail')">Ouvrir</button>
+                        </div>
+                    </div>
+
+                    <!-- Carte 2 -->
+                    <div class="wallet-card">
+                        <div>
+                            <div class="wallet-card-header">
+                                <span class="badge badge-open">Ouvert</span>
+                                <span class="tabular" style="font-weight: 700; color: var(--debtor); font-size: 0.88rem;">- 15,50 €</span>
+                            </div>
+                            <a href="#" class="wallet-card-title">Colocation MIAGE Lille 🏠</a>
+                            <p class="wallet-card-desc">Courses communes, produits ménagers et box internet.</p>
+                        </div>
+                        <div class="wallet-card-footer">
+                            <div class="avatar-group">
+                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
+                                <div class="avatar-circle" style="background: #fef3c7; color: #b45309;">A</div>
+                            </div>
+                            <button class="btn btn-outline btn-sm">Ouvrir</button>
+                        </div>
+                    </div>
+
+                    <!-- Carte 3 -->
+                    <div class="wallet-card">
+                        <div>
+                            <div class="wallet-card-header">
+                                <span class="badge badge-open">Ouvert</span>
+                                <span class="tabular" style="font-weight: 700; color: var(--primary); font-size: 0.88rem;">+ 30,00 €</span>
+                            </div>
+                            <a href="#" class="wallet-card-title">Roadtrip Alpes 2026 ⛰️</a>
+                            <p class="wallet-card-desc">Péages, carburant et ravitaillement pour le trajet.</p>
+                        </div>
+                        <div class="wallet-card-footer">
+                            <div class="avatar-group">
+                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
+                                <div class="avatar-circle" style="background: #f3e8ff; color: #7e22ce;">G</div>
+                            </div>
+                            <button class="btn btn-outline btn-sm">Ouvrir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 2 : DÉTAIL D'UNE CAGNOTTE AVEC ONGLETS   -->
+        <!-- ============================================== -->
+        <section id="screen-detail" style="display: none;">
+            <div style="margin-bottom: 1rem;">
+                <button class="btn btn-outline btn-sm" onclick="switchScreen('dashboard')">
+                    ← Retour à mes cagnottes
+                </button>
+            </div>
+
+            <!-- Hero En-tête Cagnotte -->
+            <div class="detail-hero">
+                <div class="detail-top">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.35rem;">
+                            <h1 class="detail-title">Vacances Barcelone 2026 🌴</h1>
+                            <span class="badge badge-open">Ouvert</span>
+                        </div>
+                        <div class="detail-meta">
+                            <span>Créé par <strong>Khalil</strong></span>
+                            <span>•</span>
+                            <span>Devise : <strong>EUR (€)</strong></span>
+                            <span>•</span>
+                            <span>5 participants</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="alert('Ouverture du modal de dépense ergonomique !')">
+                            + Ajouter une dépense
+                        </button>
+                        <button class="btn btn-outline" onclick="switchScreen('balances')">
+                            📊 Soldes & Dettes
+                        </button>
+                        <button class="btn btn-outline btn-sm">Inviter</button>
+                    </div>
+                </div>
+
+                <!-- Barre d'onglets ergonomique (Divulgation progressive) -->
+                <nav class="tab-nav">
+                    <div class="tab-link active" onclick="switchTab(this, 'tab-expenses')">Dépenses (14)</div>
+                    <div class="tab-link" onclick="switchTab(this, 'tab-balances-inner')">Soldes & Remboursements</div>
+                    <div class="tab-link" onclick="switchTab(this, 'tab-members')">Membres (5)</div>
+                </nav>
+
+                <!-- CONTENU ONGLET 1 : DÉPENSES -->
+                <div id="tab-expenses">
+                    <div class="section-header" style="margin-bottom: 1rem;">
+                        <span style="font-size: 0.85rem; color: var(--slate-muted); font-weight: 600;">
+                            Total dépensé : <strong class="tabular" style="color: var(--slate-dark); font-size: 1rem;">642,80 €</strong>
+                        </span>
+                        <input type="text" placeholder="Rechercher une dépense..." style="padding: 0.35rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.82rem; font-family: inherit;">
+                    </div>
+
+                    <div class="expense-list">
+                        <!-- Ligne 1 -->
+                        <div class="expense-row">
+                            <div class="expense-main">
+                                <div class="category-icon">🛒</div>
+                                <div>
+                                    <div class="expense-title">Courses Mercadona</div>
+                                    <div class="expense-sub">Payé par <strong>Khalil</strong> • Partagé entre 5 personnes</div>
+                                </div>
+                            </div>
+                            <div class="tabular">
+                                <div class="expense-amount">125,40 €</div>
+                                <div class="expense-share">25,08 € / pers</div>
+                            </div>
+                        </div>
+
+                        <!-- Ligne 2 -->
+                        <div class="expense-row">
+                            <div class="expense-main">
+                                <div class="category-icon">🎟️</div>
+                                <div>
+                                    <div class="expense-title">Billets Sagrada Família</div>
+                                    <div class="expense-sub">Payé par <strong>Gautam</strong> • Partagé entre 5 personnes</div>
+                                </div>
+                            </div>
+                            <div class="tabular">
+                                <div class="expense-amount">150,00 €</div>
+                                <div class="expense-share">30,00 € / pers</div>
+                            </div>
+                        </div>
+
+                        <!-- Ligne 3 -->
+                        <div class="expense-row">
+                            <div class="expense-main">
+                                <div class="category-icon">🍷</div>
+                                <div>
+                                    <div class="expense-title">Tapas & Sangria El Born</div>
+                                    <div class="expense-sub">Payé par <strong>Abdelkader</strong> • Partagé entre 5 personnes</div>
+                                </div>
+                            </div>
+                            <div class="tabular">
+                                <div class="expense-amount">88,20 €</div>
+                                <div class="expense-share">17,64 € / pers</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENU ONGLET 2 : SOLDES DEDANS -->
+                <div id="tab-balances-inner" style="display: none;">
+                    <p style="color: var(--slate-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                        Voici les règlements optimaux calculés pour équilibrer la cagnotte en un minimum de transactions :
+                    </p>
+                    <div class="debt-cards">
+                        <div class="debt-card">
+                            <div class="debt-flow">
+                                <strong>Gautam</strong>
+                                <span class="debt-arrow">➔</span>
+                                <strong>Khalil</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">24,92 €</span>
+                                <button class="btn btn-outline btn-sm">Régler</button>
+                            </div>
+                        </div>
+
+                        <div class="debt-card">
+                            <div class="debt-flow">
+                                <strong>Thomas</strong>
+                                <span class="debt-arrow">➔</span>
+                                <strong>Abdelkader</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">18,50 €</span>
+                                <button class="btn btn-outline btn-sm">Régler</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENU ONGLET 3 : MEMBRES -->
+                <div id="tab-members" style="display: none;">
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="user-avatar">K</div>
+                                <div>
+                                    <div style="font-weight: 700;">khalil.bouchama (Vous)</div>
+                                    <div style="font-size: 0.78rem; color: var(--slate-muted);">Créateur & Administrateur</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-open">Admin</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div class="user-avatar" style="background: #f59e0b;">A</div>
+                                <div>
+                                    <div style="font-weight: 700;">abdelkader.heddi</div>
+                                    <div style="font-size: 0.78rem; color: var(--slate-muted);">Membre actif</div>
+                                </div>
+                            </div>
+                            <span class="badge" style="background: var(--surface-raised);">Membre</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 3 : VUE DÉDIÉE SOLDES & ÉQUILIBRE        -->
+        <!-- ============================================== -->
+        <section id="screen-balances" style="display: none;">
+            <div style="margin-bottom: 1rem;">
+                <button class="btn btn-outline btn-sm" onclick="switchScreen('detail')">
+                    ← Retour au détail du pot
+                </button>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Soldes Individuels des Membres</h2>
+                        <p style="font-size: 0.85rem; color: var(--slate-muted);">Situation de chaque participant (Payé vs Dû)</p>
+                    </div>
+                    <span class="badge badge-open" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+                        Total Dépensé : 642,80 €
+                    </span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                    <!-- Membre 1 (Créancier) -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: var(--surface-raised); border-radius: var(--radius-md);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="user-avatar">K</div>
+                            <div>
+                                <span style="font-weight: 700;">Khalil</span>
+                                <div style="font-size: 0.8rem; color: var(--slate-muted);">Payé : 240,00 € • Dû : 128,56 €</div>
+                            </div>
+                        </div>
+                        <span class="badge badge-creditor tabular" style="font-size: 0.85rem;">+ 111,44 € (Créancier)</span>
+                    </div>
+
+                    <!-- Membre 2 (Débiteur) -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: var(--surface-raised); border-radius: var(--radius-md);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="user-avatar" style="background: #8b5cf6;">G</div>
+                            <div>
+                                <span style="font-weight: 700;">Gautam</span>
+                                <div style="font-size: 0.8rem; color: var(--slate-muted);">Payé : 50,00 € • Dû : 128,56 €</div>
+                            </div>
+                        </div>
+                        <span class="badge badge-debtor tabular" style="font-size: 0.85rem;">- 78,56 € (Doit rembourser)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schéma de minimisation des dettes -->
+            <div class="card">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem;">Plan de Remboursement Simplifié</h3>
+                <p style="font-size: 0.85rem; color: var(--slate-muted); margin-bottom: 1.25rem;">
+                    Ces virements permettent de solder intégralement les comptes du groupe :
+                </p>
+                <div class="debt-cards">
+                    <div class="debt-card">
+                        <div class="debt-flow">
+                            <strong>Gautam</strong>
+                            <span class="debt-arrow">➔</span>
+                            <strong>Khalil</strong>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.15rem;">78,56 €</span>
+                            <button class="btn btn-outline btn-sm">Marquer payé</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- ÉCRAN 4 : ÉTAT VIDE (EMPTY STATE DIRECTIONNEL) -->
+        <!-- ============================================== -->
+        <section id="screen-empty" style="display: none;">
+            <div class="empty-state">
+                <div class="empty-icon">✨</div>
+                <h2 class="empty-title">Aucune dépense pour l'instant</h2>
+                <p class="empty-desc">
+                    Ce porte-monnaie est tout neuf ! Ajoutez votre premier achat (courses, billets, restaurant) pour commencer à partager équitablement les frais.
+                </p>
+                <button class="btn btn-primary" onclick="switchScreen('detail')">
+                    + Ajouter la première dépense
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="text-align: center; padding: 2rem 1.5rem; color: var(--slate-muted); font-size: 0.82rem; border-top: 1px solid var(--border-subtle); background: white;">
+        <p>Les Bons Comptes — Master 2 MIAGE / IF-Django (Romain Rouvoy & Gaëtan Hasbroucq)</p>
+        <p style="margin-top: 0.25rem;">Binôme : Abdelkader HEDDI • Gautam DEMEULEMEESTER • Khalil BOUCHAMA</p>
+    </footer>
+
+    <script>
+        function switchScreen(screenId) {
+            document.getElementById('screen-dashboard').style.display = 'none';
+            document.getElementById('screen-detail').style.display = 'none';
+            document.getElementById('screen-balances').style.display = 'none';
+            document.getElementById('screen-empty').style.display = 'none';
+
+            document.getElementById('screen-' + screenId).style.display = 'block';
+
+            // Mise à jour des boutons du switch
+            const btns = document.querySelectorAll('.mockup-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            if (screenId === 'dashboard') btns[0].classList.add('active');
+            if (screenId === 'detail') btns[1].classList.add('active');
+            if (screenId === 'balances') btns[2].classList.add('active');
+            if (screenId === 'empty') btns[3].classList.add('active');
+        }
+
+        function switchTab(clickedTab, tabId) {
+            // Retirer active sur les onglets
+            const tabs = clickedTab.parentElement.querySelectorAll('.tab-link');
+            tabs.forEach(t => t.classList.remove('active'));
+            clickedTab.classList.add('active');
+
+            // Cacher tous les onglets
+            document.getElementById('tab-expenses').style.display = 'none';
+            document.getElementById('tab-balances-inner').style.display = 'none';
+            document.getElementById('tab-members').style.display = 'none';
+
+            // Afficher le sélectionné
+            document.getElementById(tabId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
