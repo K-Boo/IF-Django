@@ -112,3 +112,69 @@ Pour permettre une transition incrémentale écran par écran sans que l'applica
 | **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
 | **Impact sur le code métier** | Zéro ligne modifiée dans `models.py` / `services.py` | **Conforme (0 modification)** |
 | **Linting & Syntaxe CSS** | Absence d'erreurs de syntaxe | **100 % valide** |
+
+
+---
+
+## 📘 Étape 2 / Commit 2 : Sprite SVG Vectoriel & Composants Partiels Réutilisables
+
+### 1. Intitulé Proposé pour le Commit (GitLab)
+```text
+feat(ui): ajout du sprite svg vectoriel et des composants partiels réutilisables
+
+- Creation du catalogue unifie d'icones vectorielles (components/icons.html) avec symbols 24x24
+- Implantation du composant atomique avatar utilisateur (components/avatar.html)
+- Implantation du composant d'etat vide directionnel (components/empty_state.html)
+- Ajout des modificateurs de dimensionnement pour les avatars (.avatar-sm, .avatar-lg) dans style.css
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 2
+
+#### A. Pourquoi un Sprite SVG avec `<symbol>` au lieu de simples fichiers `.svg` séparés ?
+Dans les projets web traditionnels, chaque icône est souvent chargée comme une image externe distincte (`<img src="wallet.svg">`).
+Cette approche a deux défauts majeurs :
+1. **Multiplication des requêtes HTTP** : Si une page contient 15 icônes différentes, le navigateur doit émettre 15 requêtes réseau supplémentaires.
+2. **Impossibilité de styliser en CSS** : Une balise `<img>` ne peut pas hériter de la couleur du texte courant (`currentColor`). Si le bouton devient vert ou rouge au survol, l'icône ne change pas de couleur !
+
+En créant un **Sprite SVG unifié** (`src/templates/components/icons.html`) :
+- Toutes les icônes sont définies une seule fois sous forme de balises `<symbol id="icon-nom" viewBox="0 0 24 24">`.
+- N'importe quel gabarit HTML peut afficher une icône avec une seule ligne :
+  ```html
+  <svg class="icon"><use href="#icon-wallet"></use></svg>
+  ```
+- L'icône hérite automatiquement de la couleur du texte parent (`stroke: currentColor`). Si le bouton devient blanc au clic, l'icône devient blanche sans aucun JavaScript !
+
+#### B. Le Composant Partiel `avatar.html` (Principes SOLID)
+Au lieu de répéter dans chaque fichier HTML le calcul de l'initiale de l'utilisateur et les styles de pastille :
+```django
+{% comment %} Dans n'importe quel gabarit Django {% endcomment %}
+{% include "components/avatar.html" with user=wallet.creator size="md" %}
+```
+- **Responsabilité Unique (SRP)** : Le fichier `avatar.html` ne gère que la présentation de l'avatar.
+- **Ségrégation d'Interface (ISP)** : Il accepte indifféremment une instance de modèle `User` (avec `user.username`) ou une simple chaîne de caractères `username="Gautam"`. Il ne dépend d'aucun champ inutile.
+
+#### C. Le Composant `empty_state.html` (Lutte contre l'AI Slop)
+L'étude de marché a souligné que les IA génèrent des interfaces pour le cas idéal, en oubliant systématiquement les états où l'utilisateur n'a pas encore créé de données (0 cagnotte, 0 dépense).  
+Le composant `components/empty_state.html` fournit un cadre visuel réconfortant et orienté action :
+```django
+{% include "components/empty_state.html" with 
+    icon_id="icon-wallet" 
+    title="Aucune cagnotte pour l'instant" 
+    description="Créez votre premier pot pour commencer à partager vos dépenses entre amis." 
+    action_url=url_create 
+    action_label="Créer une cagnotte" 
+%}
+```
+L'utilisateur n'est plus confronté à une page vide ou un texte laconique, mais guidé vers son prochain objectif.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Intégrité du code métier** | Modèles et services de Gautam et Abdelkader intouchés | **100 % intouché** |
+| **Validation syntaxique des gabarits** | Compilation et rendu sans exception Django | **100 % valide** |
