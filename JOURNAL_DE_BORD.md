@@ -185,3 +185,25 @@
   - **Flake8 / Linter** : **0 warning, 0 erreur**.
   - **Architecture logicielle** : 100% conforme aux spécifications du sujet et aux standards d'ingénierie Django.
   - **État Git** : Projet clôturé, prêt pour le push final dès instruction de l'étudiant.
+
+
+---
+
+### Étape 10 : Lancement du Volet 4 — Amélioration de l'UI & UX (Commit 1 / Étape 1)
+- **Objectif & Cadrage** :
+  - Initier la refonte ergonomique et visuelle finale de l'application selon la maquette V2.1 validée.
+  - Sanctuaire absolu du code métier de Gautam et Abdelkader (zéro modification dans `models.py`, `services.py`, `views.py`).
+  - Mettre en place les fondations CSS modernes, la palette sémantique OKLCH, le diptyque typographique et les chiffres tabulaires.
+- **Réalisations Étape 1 (Commit 1)** :
+  1. **Refonte de l'Architecture CSS (`src/static/css/style.css`)** :
+     - Variables de thème `:root` : palette Émeraude Trésorerie (`#059669`), surfaces claires (`#f8fafc`), bordures modulaires et ombres naturelles.
+     - Activation de l'alignement comptable des devises via la classe `.num, .tabular-nums` (`font-variant-numeric: tabular-nums lining-nums`).
+     - Primitives des composants interactifs : boutons (`.btn`, `.btn-primary`, `.btn-secondary`, `.btn-sm`), pastilles d'icônes avec centrage absolu Flexbox (`.icon-badge`).
+     - Structure de layout asymétrique Flexbox (`.layout-grid`, `.col-main`, `.col-side`) et hauteur viewport mobile sécurisée (`min-h-[100svh]`).
+     - Conservation de l'ensemble des alias de classes pour garantir 100% de rétrocompatibilité avec les gabarits existants.
+  2. **Documentation Pédagogique Dédiée (`docs/VOLET_4_GUIDE_UI_UX.md`)** :
+     - Explication détaillée des concepts (OKLCH, chiffres tabulaires, viewport SVH, échelle modulaire de courbures, centrage optique Flexbox).
+- **Validation Qualité** :
+  - **Tests unitaires** : **26 tests réussis sur 26 (100% de succès)**.
+  - **Flake8 / Linter** : **0 warning, 0 erreur**.
+  - **Code métier** : 0 modification (100% préservé).
