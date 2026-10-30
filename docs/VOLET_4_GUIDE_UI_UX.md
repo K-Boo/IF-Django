@@ -243,3 +243,57 @@ Plutôt que d'afficher de gros blocs colorés agressifs, nous avons lié la bali
 | **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
 | **Intégrité des formulaires** | Préservation du jeton CSRF sur le formulaire de déconnexion | **100 % conforme** |
 | **Blocs d'héritage** | `title`, `content`, `extra_css`, `extra_js` fonctionnels | **100 % conforme** |
+
+
+---
+
+## 📘 Étape 4 / Commit 4 : Refonte Asymétrique Flexbox du Tableau de Bord et Invitations Compactes
+
+### 1. Intitulé du Commit Réalisé (GitLab)
+```text
+feat(wallets): refonte asymetrique flexbox du tableau de bord et invitations compactes
+
+- Remplacement de la carte brute d'invitation par un toast compact sans languette coloree
+- Ajout du bandeau de synthese metrique (total des cagnottes actives)
+- Disposition asymetrique Flexbox deux colonnes (liste des cagnottes et reglements en attente)
+- Cartes cagnottes compactes avec pastilles vectorielles SVG, pile d'avatars et montants tabulaires
+- Integration du composant reutilisable empty_state en cas d'absence de donnees
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 4
+
+#### A. Éradication de la "Languette Colorée" et Design Toast
+Dans l'ancienne version, les invitations reçues étaient logées dans un gros pavé avec une bordure gauche colorée agressive (`border-left: 4px solid var(--accent)`), un symbole d'alerte criard et des boutons encombrants. C'est l'un des archétypes de l'« AI Slop » identifié par l'étude de marché.
+Dans `wallet_list.html`, nous avons transformé ce bloc en une notification élégante et légère (`.toast-banner`) :
+- Fond neutre subtil avec bordure fine monochrome (`var(--border)`).
+- Icône SVG `#icon-bell` dans une pastille neutre.
+- Texte concis avec le nom de l'invitant et de la cagnotte en gras.
+- Boutons d'action compacts (`.btn-sm`) avec icônes vectorielles SVG intégrées (`#icon-check` et `#icon-x`).
+
+#### B. La Grille Asymétrique Flexbox (`.layout-grid`, `.col-main`, `.col-side`)
+Au lieu d'empiler des blocs verticaux de même largeur sans hiérarchie, nous avons structuré la page en deux flux logiques :
+- **Colonne Principale (`.col-main`, ratio ~2/3)** : L'activité reine de l'utilisateur, à savoir ses cagnottes actives.
+- **Colonne Latérale (`.col-side`, ratio ~1/3)** : Les informations périphériques et rapides, ici le récapitulatif des règlements en attente.
+Sur mobile, grâce à `flex-wrap: wrap;`, la colonne latérale bascule naturellement sous la colonne principale sans cassure visuelle.
+
+#### C. Les Cartes de Cagnottes (`.wallet-item`)
+Chaque cagnotte bénéficie d'une carte modernisée :
+- **Pastille thématique SVG** : Une icône `#icon-wallet` insérée dans un badge arrondi au fond émeraude très doux.
+- **Micro-pile d'avatars** : Les participants sont représentés par leurs pastilles circulaires avec un léger chevauchement négatif (`margin-right: -8px`), donnant vie au groupe en un clin d'œil.
+- **Montants en Chiffres Tabulaires (`font-variant-numeric: tabular-nums`)** : Le total dépensé et la part individuelle sont parfaitement lisibles et alignés verticalement, sans effet de "saut" lors de la lecture des chiffres.
+- **Badge d'état contextuel** : Si la cagnotte est close, un badge sobre et discret `.badge-closed` remplace le statut par défaut.
+
+#### D. Gestion Élégante du Zéro Donnée (`empty_state.html`)
+Si l'utilisateur n'a aucune cagnotte, le gabarit n'affiche plus un triste paragraphe vide : il injecte le composant `components/empty_state.html` avec un appel à l'action direct vers la création d'un pot.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Préservation du Contexte Django** | `wallets`, `invitations`, `pending_settlements` consommés sans régression | **100 % préservé** |
+| **Formulaires d'acceptation/refus** | Balises `<form method="post">` et jetons `{% csrf_token %}` conservés | **100 % fonctionnel** |
