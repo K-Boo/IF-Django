@@ -178,3 +178,68 @@ L'utilisateur n'est plus confronté à une page vide ou un texte laconique, mais
 | **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
 | **Intégrité du code métier** | Modèles et services de Gautam et Abdelkader intouchés | **100 % intouché** |
 | **Validation syntaxique des gabarits** | Compilation et rendu sans exception Django | **100 % valide** |
+
+
+---
+
+## 📘 Étape 3 / Commit 3 : Modernisation du Gabarit Base, de la Navbar et des Messages Flash
+
+### 1. Intitulé Proposé pour le Commit (GitLab)
+```text
+refactor(layout): modernisation du conteneur base, de la navbar et des messages flash
+
+- Inclusion de la police Plus Jakarta Sans avec optimisation de prechargement (preconnect)
+- Injection globale du sprite d'icones vectorielles SVG (components/icons.html)
+- Modernisation de la barre de navigation (logo vectoriel, pilule utilisateur avec avatar)
+- Refonte des messages flash Django avec icones dynamiques de statut et disposition toast
+- Ajout des blocs d'extension extensibles (extra_css, extra_js) respectant le principe Open/Closed
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 3
+
+#### A. Le Rôle Pivot de `base.html` dans le Modèle MVT de Django
+Dans l'architecture MVT (Model-View-Template) de Django, le mécanisme de **gabarit parent (*Template Inheritance*)** évite la duplication des balises structurelles `<html>`, `<head>`, `<header>`, et `<footer>`.  
+Tous les gabarits enfants débutent par :
+```django
+{% extends "base.html" %}
+```
+En modernisant `base.html` :
+1. **Zéro impact sur les vues** : Les contrôleurs Python (`views.py`) ne savent même pas que le HTML a changé ; ils continuent d'injecter leurs variables dans les blocs.
+2. **Diffusion instantanée** : L'inclusion de la police *Plus Jakarta Sans* et du sprite SVG bénéficie immédiatement à l'ensemble des écrans du projet.
+
+#### B. Optimisation des Performances Web : La directive `preconnect`
+Dans le `<head>` de `base.html`, nous avons placé :
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+```
+La directive `preconnect` informe le navigateur, dès la réception du document HTML, qu'il va devoir négocier une connexion TLS/DNS avec les serveurs de polices de Google. Cela réduit de 100 à 250ms le temps de blocage au premier rendu (*First Contentful Paint*).
+
+#### C. Composition de Composants : L'Avatar dans la Navigation
+Dans la navbar, pour afficher l'utilisateur connecté, nous n'avons pas réécrit de balises spécifiques. Nous avons composé avec notre composant atomique créé à l'étape 2 :
+```django
+<a href="{% url 'accounts:profile' %}" class="nav-link">
+    {% include "components/avatar.html" with user=user size="sm" %}
+    <span>{{ user.username }}</span>
+</a>
+```
+C'est l'illustration exacte du principe **DRY (Don't Repeat Yourself)** et de la **réutilisabilité des composants**.
+
+#### D. Mapping Dynamique des Icônes pour les Messages Flash
+Django dispose d'un framework natif de messages (`messages.success`, `messages.error`, `messages.warning`).
+Plutôt que d'afficher de gros blocs colorés agressifs, nous avons lié la balise `message.tags` aux icônes vectorielles correspondantes :
+- `success` ➔ Icône `#icon-check` verte.
+- `error` / `danger` ➔ Icône `#icon-x` rouge.
+- Autre (`info`, `warning`) ➔ Icône `#icon-bell` émeraude.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Intégrité des formulaires** | Préservation du jeton CSRF sur le formulaire de déconnexion | **100 % conforme** |
+| **Blocs d'héritage** | `title`, `content`, `extra_css`, `extra_js` fonctionnels | **100 % conforme** |
