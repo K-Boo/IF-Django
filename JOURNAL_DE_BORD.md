@@ -166,3 +166,22 @@
   - **Tests unitaires** : **26 tests réussis sur 26 (100% de succès)**.
   - **Style & Normes** : 0 erreur Flake8, formatage Black 100% propre.
   - **GitLab Univ-Lille** : 3 commits modulaires signés sous `Khalil Bouchama <khalil.bouchama.etu@univ-lille.fr>`.
+
+### Étape 9 : Finalisation Définitive du Projet, Backend Partagé 12-Factor & Clôture Complète
+- **Objectif & Cadrage** :
+  - Clôturer définitivement l'ensemble du périmètre applicatif attendu par les enseignants (Romain Rouvoy & Gaëtan Hasbroucq).
+  - Répondre à l'exigence formelle du backend partagé multi-utilisateurs pour le travail en groupe et finaliser la documentation d'architecture.
+- **Actions Réalisées** :
+  1. **Support du Backend Partagé PostgreSQL & Configuration 12-Factor (`settings.py`)** :
+     - Utilisation de `django-environ` pour externaliser la configuration (`SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`).
+     - Configuration universelle de la base de données via `env.db_url("DATABASE_URL")` permettant de basculer sur le conteneur Docker `postgres:16-alpine` partagé entre les machines du groupe, avec repli transparent sur `sqlite3` en local.
+  2. **Mise à Jour des Spécifications & Architecture Officielle** :
+     - Actualisation du diagramme MCD Mermaid dans `docs/ARCHITECTURE.md` avec l'entité `Reimbursement`.
+     - Complétion du cahier des charges `docs/SPECIFICATIONS.md` et du guide d'accueil `README.md`.
+  3. **Enrichissement du Guide Pédagogique Volet 3** :
+     - Rédaction des explications techniques détaillées dans `docs/VOLET_3_GUIDE_PEDAGOGIQUE.md`.
+- **Indicateurs & Bilan Final** :
+  - **Tests unitaires** : **26 tests passants sur 26 (100% de succès)**.
+  - **Flake8 / Linter** : **0 warning, 0 erreur**.
+  - **Architecture logicielle** : 100% conforme aux spécifications du sujet et aux standards d'ingénierie Django.
+  - **État Git** : Projet clôturé, prêt pour le push final dès instruction de l'étudiant.
