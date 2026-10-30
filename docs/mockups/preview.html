@@ -3,46 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maquette Interactive — Les Bons Comptes (Refonte UI/UX)</title>
+    <title>Les Bons Comptes — Design System & Maquette UX (V2 Pro)</title>
     <!-- Police Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Palette OKLCH - Les Bons Comptes */
-            --bg-canvas: #f8fafc;
-            --surface-card: #ffffff;
-            --surface-raised: #f1f5f9;
-            --surface-subtle: #f8fafc;
-            --border-subtle: #e2e8f0;
-            --border-strong: #cbd5e1;
+            /* Palette Haute Définition Fintech (Inspirée Wise / Linear / Revolut 2.0) */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --surface-active: #e2e8f0;
             
-            --slate-dark: #0f172a;
-            --slate-muted: #64748b;
-            --slate-light: #94a3b8;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
             
-            /* Émeraude Trésorerie (Accent Solvabilité & Action) */
-            --primary: #059669;
-            --primary-hover: #047857;
-            --primary-light: #ecfdf5;
-            --primary-border: #a7f3d0;
-            --primary-text: #065f46;
-            
-            /* Corail Dettes / Alertes */
-            --debtor: #e11d48;
-            --debtor-light: #fff1f2;
-            --debtor-border: #fecdd3;
-            --debtor-text: #9f1239;
+            --text-main: #090d16;
+            --text-muted: #526077;
+            --text-tertiary: #8a99ad;
 
+            /* Accent Signature Émeraude */
+            --brand: #059669;
+            --brand-dark: #047857;
+            --brand-subtle: #ecfdf5;
+            --brand-border: #a7f3d0;
+            --brand-text: #065f46;
+
+            /* Balance Positive / Négative */
+            --positive: #059669;
+            --positive-bg: #ecfdf5;
+            --negative: #e11d48;
+            --negative-bg: #fff1f2;
+
+            /* Rayons de courbure modulaires */
+            --radius-xs: 4px;
             --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            
-            --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-pill: 9999px;
+
+            /* Ombres discrètes (zéro effet blurry AI) */
+            --shadow-subtle: 0 1px 2px rgba(9, 13, 22, 0.04);
+            --shadow-float: 0 8px 24px -4px rgba(9, 13, 22, 0.08), 0 2px 6px -1px rgba(9, 13, 22, 0.04);
         }
 
         * {
@@ -53,1024 +56,1152 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--slate-dark);
-            line-height: 1.5;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.45;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        .tabular {
+        /* Chiffres tabulaires stricts pour les données monétaires */
+        .num {
             font-variant-numeric: tabular-nums lining-nums;
             letter-spacing: -0.02em;
         }
 
-        /* Barre supérieure de prévisualisation (Barre de commande des maquettes) */
-        .mockup-toolbar {
-            background-color: var(--slate-dark);
+        /* Barres d'outils et sélecteur de maquette */
+        .mockup-header {
+            background-color: var(--text-main);
             color: white;
             padding: 0.65rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.85rem;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .mockup-switcher {
+        .mockup-controls {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             padding: 0.25rem;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
         }
 
-        .mockup-btn {
+        .mockup-tab-btn {
             background: transparent;
             border: none;
             color: #94a3b8;
-            padding: 0.4rem 0.85rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
+            padding: 0.35rem 0.85rem;
+            border-radius: 4px;
             font-size: 0.82rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.15s ease;
             font-family: inherit;
+            transition: all 0.15s;
         }
 
-        .mockup-btn.active {
+        .mockup-tab-btn.active {
             background: white;
-            color: var(--slate-dark);
-            box-shadow: var(--shadow-sm);
+            color: var(--text-main);
         }
 
-        /* Navbar de l'application */
+        /* Top Navigation Bar */
         .navbar {
-            background-color: var(--surface-card);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 0.85rem 2rem;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .brand {
+        .nav-left {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-weight: 800;
-            font-size: 1.15rem;
-            color: var(--slate-dark);
+            gap: 2rem;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
             text-decoration: none;
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 1.05rem;
             letter-spacing: -0.02em;
         }
 
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), #047857);
+        .brand-icon-box {
+            width: 28px;
+            height: 28px;
+            background: var(--brand);
             color: white;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 1rem;
-            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.25);
         }
 
-        .nav-actions {
+        .nav-links {
             display: flex;
             align-items: center;
-            gap: 1.25rem;
+            gap: 0.5rem;
+            list-style: none;
         }
 
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.35rem 0.75rem;
-            background: var(--surface-raised);
-            border-radius: 9999px;
-            font-size: 0.85rem;
+        .nav-item {
+            padding: 0.45rem 0.85rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
             font-weight: 600;
-            color: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-        }
-
-        .user-avatar {
-            width: 26px;
-            height: 26px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
+            transition: all 0.15s;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
+            gap: 0.4rem;
         }
 
-        /* Layout Container */
-        .app-container {
-            max-width: 1140px;
-            width: 100%;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-            flex: 1;
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-main);
+            background: var(--surface-hover);
         }
 
-        /* Boutons */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Boutons Primitifs */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 0.55rem 1.1rem;
-            border-radius: var(--radius-md);
+            gap: 0.45rem;
+            padding: 0.5rem 0.95rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.86rem;
             font-weight: 600;
-            font-size: 0.88rem;
+            font-family: inherit;
             cursor: pointer;
             text-decoration: none;
             border: 1px solid transparent;
             transition: all 0.15s ease;
-            font-family: inherit;
+            white-space: nowrap;
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background-color: var(--brand);
             color: white;
-            box-shadow: 0 1px 3px rgba(5, 150, 105, 0.25);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
+            background-color: var(--brand-dark);
         }
 
-        .btn-outline {
-            background-color: white;
-            color: var(--slate-dark);
-            border-color: var(--border-subtle);
-            box-shadow: var(--shadow-sm);
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--text-main);
+            border-color: var(--border);
+            box-shadow: var(--shadow-subtle);
         }
 
-        .btn-outline:hover {
-            background-color: var(--surface-raised);
-            border-color: var(--border-strong);
+        .btn-secondary:hover {
+            background-color: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        .btn-ghost:hover {
+            background: var(--surface-hover);
+            color: var(--text-main);
         }
 
         .btn-sm {
-            padding: 0.4rem 0.75rem;
+            padding: 0.35rem 0.65rem;
             font-size: 0.8rem;
         }
 
-        /* Badges */
-        .badge {
-            display: inline-flex;
+        .btn-icon-only {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: var(--radius-sm);
+        }
+
+        /* SVG Icons Styling */
+        .icon {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .icon-lg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Conteneur Applicatif Asymétrique */
+        .app-shell {
+            max-width: 1200px;
+            width: 100%;
+            margin: 1.5rem auto 3rem;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        /* Barre d'alerte compacte (Remplacement élégant de l'encadré à bordure de couleur) */
+        .toast-banner {
+            display: flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.25rem 0.65rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
+            justify-content: space-between;
+            padding: 0.65rem 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.86rem;
+        }
+
+        .toast-tag {
+            background: #f1f5f9;
+            color: var(--text-main);
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-xs);
+            font-size: 0.72rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Layout Asymétrique Flexbox (Main Content + Context Sidebar) */
+        .layout-grid {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .col-main {
+            flex: 1;
+            min-width: 0; /* Évite les débordements flexbox */
+        }
+
+        .col-side {
+            width: 340px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 900px) {
+            .layout-grid {
+                flex-direction: column;
+            }
+            .col-side {
+                width: 100%;
+            }
+        }
+
+        /* Dashboard Metric Strip */
+        .metric-strip {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .metric-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .metric-item:not(:last-child) {
+            border-right: 1px solid var(--border);
+            padding-right: 1.5rem;
+            margin-right: 1.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
 
-        .badge-open {
-            background-color: var(--primary-light);
-            color: var(--primary-text);
-            border: 1px solid var(--primary-border);
+        .metric-value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
 
-        .badge-creditor {
-            background-color: var(--primary-light);
-            color: var(--primary-text);
-            border: 1px solid var(--primary-border);
+        .metric-value.positive {
+            color: var(--positive);
         }
 
-        .badge-debtor {
-            background-color: var(--debtor-light);
-            color: var(--debtor-text);
-            border: 1px solid var(--debtor-border);
+        .metric-value.negative {
+            color: var(--negative);
         }
 
-        /* Cartes & Composants */
-        .card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            transition: border-color 0.15s, box-shadow 0.15s;
-        }
-
-        /* --- SCREEN 1: DASHBOARD --- */
-        .hero-banner {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            border-radius: var(--radius-xl);
-            padding: 2rem 2.5rem;
-            margin-bottom: 2rem;
+        /* Section Headings */
+        .view-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
+            margin-bottom: 1rem;
         }
 
-        .hero-banner::after {
-            content: "";
-            position: absolute;
-            right: -20px;
-            bottom: -30px;
-            width: 220px;
-            height: 220px;
-            background: radial-gradient(circle, rgba(5, 150, 105, 0.25) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.35rem;
-        }
-
-        .hero-subtitle {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
-        .hero-metric-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-lg);
-            text-align: right;
-        }
-
-        .hero-metric-label {
-            font-size: 0.78rem;
-            color: #94a3b8;
-            text-transform: uppercase;
+        .view-title {
+            font-size: 1.15rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .hero-metric-val {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #34d399; /* Émeraude clair */
+        /* Cartes de Cagnottes (Flexbox Card avec micro-indicateurs) */
+        .wallet-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .wallet-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.15rem 1.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .wallet-item:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateY(-1px);
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 0;
+        }
+
+        .wallet-icon-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .wallet-meta {
+            min-width: 0;
+        }
+
+        .wallet-title {
+            font-weight: 700;
+            font-size: 0.98rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .wallet-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
             margin-top: 0.15rem;
         }
 
-        .section-header {
+        .wallet-status {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.25rem;
+            gap: 1.5rem;
+            flex-shrink: 0;
         }
 
-        .section-title {
-            font-size: 1.2rem;
+        .wallet-balance {
+            text-align: right;
+        }
+
+        .wallet-balance-num {
+            font-size: 1rem;
             font-weight: 700;
-            letter-spacing: -0.01em;
-            color: var(--slate-dark);
         }
 
-        .wallets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2.5rem;
+        .wallet-balance-sub {
+            font-size: 0.74rem;
+            color: var(--text-tertiary);
         }
 
-        .wallet-card {
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            background: white;
-            padding: 1.4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            transition: all 0.2s ease;
-        }
-
-        .wallet-card:hover {
-            border-color: var(--border-strong);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .wallet-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.85rem;
-        }
-
-        .wallet-card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--slate-dark);
-            text-decoration: none;
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-
-        .wallet-card-title:hover {
-            color: var(--primary);
-        }
-
-        .wallet-card-desc {
-            font-size: 0.85rem;
-            color: var(--slate-muted);
-            margin-bottom: 1.25rem;
-            line-height: 1.4;
-        }
-
-        .wallet-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .avatar-group {
+        /* Avatar Stack Circulaire */
+        .avatar-pile {
             display: flex;
             align-items: center;
         }
 
-        .avatar-circle {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--surface-raised);
-            color: var(--slate-dark);
+        .avatar-node {
+            width: 26px;
+            height: 26px;
+            border-radius: var(--radius-pill);
+            background: #e2e8f0;
+            color: var(--text-main);
             border: 2px solid white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.72rem;
             font-weight: 700;
-            margin-left: -8px;
+            margin-left: -7px;
         }
 
-        .avatar-circle:first-child {
+        .avatar-node:first-child {
             margin-left: 0;
         }
 
-        /* --- SCREEN 2: DÉTAIL D'UN POT PAR ONGLETS --- */
-        .detail-hero {
-            background: white;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-xl);
-            padding: 1.75rem 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .detail-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 1.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .detail-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .detail-meta {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-            color: var(--slate-muted);
-            font-size: 0.85rem;
-            margin-top: 0.35rem;
-        }
-
-        .tab-nav {
-            display: flex;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-link {
-            padding: 0.75rem 1.25rem;
-            font-weight: 600;
-            font-size: 0.92rem;
-            color: var(--slate-muted);
-            text-decoration: none;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .tab-link:hover {
-            color: var(--slate-dark);
-        }
-
-        .tab-link.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        /* Liste de dépenses */
-        .expense-list {
+        /* Timeline Chronologique des Dépenses (Détail Pot) */
+        .timeline-stream {
             display: flex;
             flex-direction: column;
             gap: 0.65rem;
         }
 
-        .expense-row {
+        .stream-day-separator {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin: 0.75rem 0 0.25rem 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stream-day-separator::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .expense-card {
             background: white;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 1rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1.15rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1rem;
             transition: border-color 0.15s;
         }
 
-        .expense-row:hover {
-            border-color: var(--border-strong);
+        .expense-card:hover {
+            border-color: var(--border-hover);
         }
 
-        .expense-main {
+        .expense-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.85rem;
         }
 
-        .category-icon {
-            width: 42px;
-            height: 42px;
-            background: var(--surface-raised);
-            border-radius: var(--radius-md);
+        .expense-cat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            background: var(--surface-hover);
+            color: var(--text-muted);
         }
 
-        .expense-title {
-            font-weight: 700;
-            font-size: 0.98rem;
-            color: var(--slate-dark);
+        .expense-label {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-main);
         }
 
-        .expense-sub {
-            font-size: 0.8rem;
-            color: var(--slate-muted);
-            margin-top: 0.15rem;
-        }
-
-        .expense-amount {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--slate-dark);
-            text-align: right;
-        }
-
-        .expense-share {
-            font-size: 0.75rem;
-            color: var(--slate-muted);
+        .expense-detail {
+            font-size: 0.78rem;
+            color: var(--text-muted);
             margin-top: 0.1rem;
         }
 
-        /* Cartes de remboursement (Dettes) */
-        .debt-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1rem;
+        .expense-right {
+            text-align: right;
+            flex-shrink: 0;
         }
 
-        .debt-card {
+        .expense-cost {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .expense-split-hint {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Cartes de Règlement de Dettes (Flow Diagram) */
+        .settlement-card {
             background: white;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.15rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1rem;
         }
 
-        .debt-flow {
+        .settlement-actors {
             display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.88rem;
+        }
+
+        .actor-tag {
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .arrow-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-pill);
+            background: var(--brand-subtle);
+            color: var(--brand);
+        }
+
+        /* Pill Tabs */
+        .segment-tabs {
+            display: inline-flex;
+            background: #e2e8f0;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            gap: 0.2rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .segment-btn {
+            background: transparent;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .segment-btn.active {
+            background: white;
+            color: var(--text-main);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        }
+
+        /* Empty State Élégant & Minimaliste */
+        .empty-boundary {
+            background: white;
+            border: 1px dashed var(--border-hover);
+            border-radius: var(--radius-lg);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 0.75rem;
         }
 
-        .debt-arrow {
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: 800;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3.5rem 1.5rem;
-            background: white;
-            border: 1px dashed var(--border-strong);
-            border-radius: var(--radius-xl);
-        }
-
-        .empty-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 1.25rem;
-            background: var(--primary-light);
-            color: var(--primary);
-            border-radius: 50%;
+        .empty-icon-ring {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-pill);
+            background: var(--surface-hover);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-        }
-
-        .empty-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--slate-dark);
-            margin-bottom: 0.4rem;
-        }
-
-        .empty-desc {
-            font-size: 0.88rem;
-            color: var(--slate-muted);
-            max-width: 420px;
-            margin: 0 auto 1.5rem;
-            line-height: 1.5;
-        }
-
-        /* Responsive Mobile */
-        @media (max-width: 768px) {
-            .hero-banner {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1.25rem;
-                padding: 1.5rem;
-            }
-            .hero-metric-card {
-                text-align: left;
-                width: 100%;
-            }
-            .detail-top {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
         }
     </style>
 </head>
 <body>
 
-    <!-- Barre de Contrôle de la Maquette -->
-    <div class="mockup-toolbar">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-weight: 700; color: #34d399;">● MAQUETTE UI/UX</span>
-            <span style="color: #64748b;">|</span>
-            <span>Refonte « Les Bons Comptes » (Anti-Slop & SOLID)</span>
+    <!-- SVG SPRITE DEPLOYMENT (Icônes Vectorielles Précises type Lucide / Feather) -->
+    <svg style="display: none;">
+        <defs>
+            <g id="icon-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-8 8H5a2 2 0 0 1-2-2V6"/></g>
+            <g id="icon-plus"><path d="M12 5v14M5 12h14"/></g>
+            <g id="icon-check"><polyline points="20 6 9 17 4 12"/></g>
+            <g id="icon-x"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></g>
+            <g id="icon-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></g>
+            <g id="icon-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></g>
+            <g id="icon-receipt"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-8M16 12h-8M12 16h-4"/></g>
+            <g id="icon-shopping-bag"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></g>
+            <g id="icon-ticket"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></g>
+            <g id="icon-coffee"><path d="M10 2v2M14 2v2M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/></g>
+            <g id="icon-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></g>
+            <g id="icon-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g>
+            <g id="icon-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></g>
+            <g id="icon-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></g>
+        </defs>
+    </svg>
+
+    <!-- BARRE TECHNIQUE DE SÉLECTION D'ÉCRAN (MOCKUP CONTROLLER) -->
+    <div class="mockup-header">
+        <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span>
+            <strong>MAQUETTE V2 ÉPURÉE</strong>
+            <span style="opacity: 0.4;">|</span>
+            <span style="opacity: 0.8;">Élimination formelle du Slop AI & Flexbox Adaptable</span>
         </div>
-        <div class="mockup-switcher">
-            <button class="mockup-btn active" onclick="switchScreen('dashboard')">1. Mes Cagnottes (Dashboard)</button>
-            <button class="mockup-btn" onclick="switchScreen('detail')">2. Détail Cagnotte (Onglets)</button>
-            <button class="mockup-btn" onclick="switchScreen('balances')">3. Soldes & Dettes</button>
-            <button class="mockup-btn" onclick="switchScreen('empty')">4. État Vide (Empty State)</button>
+        <div class="mockup-controls">
+            <button class="mockup-tab-btn active" onclick="navigateScreen('dash')">1. Mes Cagnottes</button>
+            <button class="mockup-tab-btn" onclick="navigateScreen('detail')">2. Vue Cagnotte (Dépenses & Soldes)</button>
+            <button class="mockup-tab-btn" onclick="navigateScreen('empty')">3. État Vide (Empty State)</button>
         </div>
     </div>
 
-    <!-- Navigation Header -->
+    <!-- NAVIGATION PRINCIPALE (STYLE FINTECH SOBRE) -->
     <header class="navbar">
-        <a href="#" class="brand">
-            <div class="brand-icon">✓</div>
-            Les Bons Comptes
-        </a>
-        <div class="nav-actions">
-            <a href="#" class="btn btn-outline btn-sm">Mes Cagnottes</a>
-            <div class="user-pill">
-                <div class="user-avatar">K</div>
-                <span>khalil.bouchama</span>
+        <div class="nav-left">
+            <a href="#" class="brand-logo">
+                <div class="brand-icon-box">
+                    <svg class="icon"><use href="#icon-wallet"/></svg>
+                </div>
+                Les Bons Comptes
+            </a>
+            <nav class="nav-links">
+                <a href="#" class="nav-item active" onclick="navigateScreen('dash')">
+                    <svg class="icon"><use href="#icon-wallet"/></svg>
+                    Cagnottes
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="icon"><use href="#icon-receipt"/></svg>
+                    Dépenses globales
+                </a>
+            </nav>
+        </div>
+
+        <div class="nav-right">
+            <button class="btn btn-ghost btn-icon-only" title="Notifications">
+                <svg class="icon"><use href="#icon-bell"/></svg>
+            </button>
+            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.65rem; background: var(--surface-hover); border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--text-main); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">K</span>
+                khalil.b
             </div>
         </div>
     </header>
 
-    <!-- MAIN APP CONTAINER -->
-    <main class="app-container">
+    <!-- CORPS DE PAGE APPLICATIF -->
+    <div class="app-shell">
 
         <!-- ============================================== -->
-        <!-- ÉCRAN 1 : DASHBOARD (LISTE DES CAGNOTTES)      -->
+        <!-- VUE 1 : TABLEAU DE BORD « MES CAGNOTTES »      -->
         <!-- ============================================== -->
-        <section id="screen-dashboard">
-            <div class="hero-banner">
-                <div>
-                    <h1 class="hero-title">Bonjour, Khalil 👋</h1>
-                    <p class="hero-subtitle">Vous participez actuellement à 3 cagnottes actives.</p>
-                </div>
-                <div class="hero-metric-card">
-                    <div class="hero-metric-label">Position Nette Globale</div>
-                    <div class="hero-metric-val tabular">+ 42,50 €</div>
-                    <div style="font-size: 0.75rem; color: #a7f3d0; margin-top: 0.2rem;">On vous doit de l'argent</div>
-                </div>
-            </div>
+        <main id="view-dash">
 
-            <!-- Invitations en attente -->
-            <div style="margin-bottom: 2rem;">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        Invitations reçues
-                        <span class="badge badge-open" style="font-size: 0.75rem; margin-left: 0.4rem;">1 en attente</span>
-                    </h2>
+            <!-- Notification Inline Simple (Pas de languette de couleur baveuse) -->
+            <div class="toast-banner">
+                <div class="toast-content">
+                    <span class="toast-tag">Invitation</span>
+                    <span><strong>Abdelkader</strong> vous a invité au pot <strong>« Anniversaire Thomas »</strong></span>
                 </div>
-                <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--primary);">
-                    <div>
-                        <h3 style="font-size: 1.05rem; font-weight: 700;">Anniversaire Thomas 🎂</h3>
-                        <p style="font-size: 0.85rem; color: var(--slate-muted); margin-top: 0.2rem;">
-                            Invité par <strong>abdelkader.h</strong> • Devise : EUR (€)
-                        </p>
-                    </div>
-                    <div style="display: flex; gap: 0.65rem;">
-                        <button class="btn btn-primary btn-sm">Accepter</button>
-                        <button class="btn btn-outline btn-sm" style="color: var(--debtor);">Refuser</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cagnottes Actives -->
-            <div>
-                <div class="section-header">
-                    <div>
-                        <h2 class="section-title">Cagnottes en Cours</h2>
-                        <p style="font-size: 0.85rem; color: var(--slate-muted);">Dépenses partagées et voyages de groupe</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="switchScreen('detail')">
-                        + Créer une cagnotte
+                <div style="display: flex; gap: 0.4rem;">
+                    <button class="btn btn-primary btn-sm">
+                        <svg class="icon"><use href="#icon-check"/></svg>
+                        Accepter
+                    </button>
+                    <button class="btn btn-secondary btn-sm" style="color: var(--negative);">
+                        <svg class="icon"><use href="#icon-x"/></svg>
+                        Refuser
                     </button>
                 </div>
+            </div>
 
-                <div class="wallets-grid">
-                    <!-- Carte 1 -->
-                    <div class="wallet-card">
-                        <div>
-                            <div class="wallet-card-header">
-                                <span class="badge badge-open">Ouvert</span>
-                                <span class="tabular" style="font-weight: 700; color: var(--primary); font-size: 0.88rem;">+ 28,00 €</span>
-                            </div>
-                            <a href="#" class="wallet-card-title" onclick="switchScreen('detail')">Vacances Barcelone 2026 🌴</a>
-                            <p class="wallet-card-desc">Location Airbnb, courses et billets pour le groupe d'amis.</p>
-                        </div>
-                        <div class="wallet-card-footer">
-                            <div class="avatar-group">
-                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
-                                <div class="avatar-circle" style="background: #fef3c7; color: #b45309;">A</div>
-                                <div class="avatar-circle" style="background: #f3e8ff; color: #7e22ce;">G</div>
-                                <div class="avatar-circle" style="font-size: 0.65rem;">+2</div>
-                            </div>
-                            <button class="btn btn-outline btn-sm" onclick="switchScreen('detail')">Ouvrir</button>
+            <!-- Bandeau Métrique Synthétique -->
+            <div class="metric-strip">
+                <div class="metric-item">
+                    <span class="metric-label">Position Nette</span>
+                    <span class="metric-value positive num">+ 42,50 €</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Total Dépensé Actif</span>
+                    <span class="metric-value num">918,20 €</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Cagnottes en cours</span>
+                    <span class="metric-value num">3</span>
+                </div>
+                <div>
+                    <button class="btn btn-primary" onclick="navigateScreen('detail')">
+                        <svg class="icon"><use href="#icon-plus"/></svg>
+                        Nouveau Pot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grille Asymétrique Flexbox -->
+            <div class="layout-grid">
+                
+                <!-- COLONNE PRINCIPALE : LISTE DES CAGNOTTES -->
+                <div class="col-main">
+                    <div class="view-header">
+                        <h2 class="view-title">
+                            Vos Portes-Monnaies
+                        </h2>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary btn-sm">
+                                <svg class="icon"><use href="#icon-search"/></svg>
+                                Filtrer
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Carte 2 -->
-                    <div class="wallet-card">
-                        <div>
-                            <div class="wallet-card-header">
-                                <span class="badge badge-open">Ouvert</span>
-                                <span class="tabular" style="font-weight: 700; color: var(--debtor); font-size: 0.88rem;">- 15,50 €</span>
+                    <div class="wallet-stack">
+                        <!-- Pot 1 -->
+                        <div class="wallet-item" onclick="navigateScreen('detail')">
+                            <div class="wallet-info">
+                                <div class="wallet-icon-badge">
+                                    <svg class="icon-lg"><use href="#icon-wallet"/></svg>
+                                </div>
+                                <div class="wallet-meta">
+                                    <div class="wallet-title">Vacances Barcelone 2026</div>
+                                    <div class="wallet-sub">
+                                        <span>5 participants</span>
+                                        <span>•</span>
+                                        <span>Créé par vous</span>
+                                    </div>
+                                </div>
                             </div>
-                            <a href="#" class="wallet-card-title">Colocation MIAGE Lille 🏠</a>
-                            <p class="wallet-card-desc">Courses communes, produits ménagers et box internet.</p>
-                        </div>
-                        <div class="wallet-card-footer">
-                            <div class="avatar-group">
-                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
-                                <div class="avatar-circle" style="background: #fef3c7; color: #b45309;">A</div>
+                            <div class="wallet-status">
+                                <div class="avatar-pile">
+                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                    <div class="avatar-node" style="background:#d97706; color:white;">A</div>
+                                    <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
+                                </div>
+                                <div class="wallet-balance">
+                                    <div class="wallet-balance-num positive num">+ 28,00 €</div>
+                                    <div class="wallet-balance-sub">On vous doit</div>
+                                </div>
+                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
                             </div>
-                            <button class="btn btn-outline btn-sm">Ouvrir</button>
                         </div>
-                    </div>
 
-                    <!-- Carte 3 -->
-                    <div class="wallet-card">
-                        <div>
-                            <div class="wallet-card-header">
-                                <span class="badge badge-open">Ouvert</span>
-                                <span class="tabular" style="font-weight: 700; color: var(--primary); font-size: 0.88rem;">+ 30,00 €</span>
+                        <!-- Pot 2 -->
+                        <div class="wallet-item">
+                            <div class="wallet-info">
+                                <div class="wallet-icon-badge">
+                                    <svg class="icon-lg"><use href="#icon-shopping-bag"/></svg>
+                                </div>
+                                <div class="wallet-meta">
+                                    <div class="wallet-title">Colocation MIAGE Lille</div>
+                                    <div class="wallet-sub">
+                                        <span>3 participants</span>
+                                        <span>•</span>
+                                        <span>Créé par Abdelkader</span>
+                                    </div>
+                                </div>
                             </div>
-                            <a href="#" class="wallet-card-title">Roadtrip Alpes 2026 ⛰️</a>
-                            <p class="wallet-card-desc">Péages, carburant et ravitaillement pour le trajet.</p>
+                            <div class="wallet-status">
+                                <div class="avatar-pile">
+                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                    <div class="avatar-node" style="background:#d97706; color:white;">A</div>
+                                </div>
+                                <div class="wallet-balance">
+                                    <div class="wallet-balance-num negative num">- 15,50 €</div>
+                                    <div class="wallet-balance-sub">Vous devez</div>
+                                </div>
+                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
+                            </div>
                         </div>
-                        <div class="wallet-card-footer">
-                            <div class="avatar-group">
-                                <div class="avatar-circle" style="background: #e0f2fe; color: #0369a1;">K</div>
-                                <div class="avatar-circle" style="background: #f3e8ff; color: #7e22ce;">G</div>
+
+                        <!-- Pot 3 -->
+                        <div class="wallet-item">
+                            <div class="wallet-info">
+                                <div class="wallet-icon-badge">
+                                    <svg class="icon-lg"><use href="#icon-ticket"/></svg>
+                                </div>
+                                <div class="wallet-meta">
+                                    <div class="wallet-title">Roadtrip Alpes 2026</div>
+                                    <div class="wallet-sub">
+                                        <span>4 participants</span>
+                                        <span>•</span>
+                                        <span>Créé par Gautam</span>
+                                    </div>
+                                </div>
                             </div>
-                            <button class="btn btn-outline btn-sm">Ouvrir</button>
+                            <div class="wallet-status">
+                                <div class="avatar-pile">
+                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                    <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
+                                </div>
+                                <div class="wallet-balance">
+                                    <div class="wallet-balance-num positive num">+ 30,00 €</div>
+                                    <div class="wallet-balance-sub">On vous doit</div>
+                                </div>
+                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- COLONNE SECONDAIRE : LIQUIDATION DES DETTES RAPIDES -->
+                <aside class="col-side">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem;">
+                        <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+                            <span>Règlements en attente</span>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">2 virements</span>
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Virement 1 -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--border);">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
+                                    <strong>Gautam</strong>
+                                    <svg class="icon" style="color: var(--brand);"><use href="#icon-arrow-right"/></svg>
+                                    <strong>Vous</strong>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span class="num" style="font-weight: 700; font-size: 0.92rem; color: var(--positive);">24,92 €</span>
+                                    <button class="btn btn-secondary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Reçu</button>
+                                </div>
+                            </div>
+
+                            <!-- Virement 2 -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
+                                    <strong>Vous</strong>
+                                    <svg class="icon" style="color: var(--negative);"><use href="#icon-arrow-right"/></svg>
+                                    <strong>Abdelkader</strong>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span class="num" style="font-weight: 700; font-size: 0.92rem; color: var(--negative);">15,50 €</span>
+                                    <button class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Régler</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
             </div>
-        </section>
+        </main>
 
         <!-- ============================================== -->
-        <!-- ÉCRAN 2 : DÉTAIL D'UNE CAGNOTTE AVEC ONGLETS   -->
+        <!-- VUE 2 : DÉTAIL POT (CHRONO EXPENSES & DÉTAIL)  -->
         <!-- ============================================== -->
-        <section id="screen-detail" style="display: none;">
-            <div style="margin-bottom: 1rem;">
-                <button class="btn btn-outline btn-sm" onclick="switchScreen('dashboard')">
-                    ← Retour à mes cagnottes
+        <main id="view-detail" style="display: none;">
+            
+            <!-- Breadcrumb & Back -->
+            <div style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                <button class="btn btn-ghost btn-sm" onclick="navigateScreen('dash')">
+                    ← Retour à la liste
                 </button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-secondary btn-sm">
+                        <svg class="icon"><use href="#icon-download"/></svg>
+                        Export CSV
+                    </button>
+                    <button class="btn btn-secondary btn-sm">
+                        <svg class="icon"><use href="#icon-users"/></svg>
+                        Inviter
+                    </button>
+                    <button class="btn btn-secondary btn-sm" style="color: var(--negative);">
+                        <svg class="icon"><use href="#icon-lock"/></svg>
+                        Clôturer
+                    </button>
+                </div>
             </div>
 
-            <!-- Hero En-tête Cagnotte -->
-            <div class="detail-hero">
-                <div class="detail-top">
+            <!-- En-tête de la cagnotte -->
+            <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                     <div>
-                        <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.35rem;">
-                            <h1 class="detail-title">Vacances Barcelone 2026 🌴</h1>
-                            <span class="badge badge-open">Ouvert</span>
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            <h1 style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">Vacances Barcelone 2026</h1>
+                            <span style="font-size: 0.72rem; font-weight: 700; background: var(--brand-subtle); color: var(--brand-text); padding: 0.2rem 0.55rem; border-radius: var(--radius-pill); border: 1px solid var(--brand-border);">OUVERT</span>
                         </div>
-                        <div class="detail-meta">
-                            <span>Créé par <strong>Khalil</strong></span>
-                            <span>•</span>
-                            <span>Devise : <strong>EUR (€)</strong></span>
-                            <span>•</span>
-                            <span>5 participants</span>
-                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Devise : <strong>EUR (€)</strong> • 5 membres • Créé le 12 mai 2026
+                        </p>
                     </div>
-                    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-                        <button class="btn btn-primary" onclick="alert('Ouverture du modal de dépense ergonomique !')">
-                            + Ajouter une dépense
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total engagé</div>
+                            <div class="num" style="font-size: 1.45rem; font-weight: 800;">642,80 €</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="alert('Formulaire modal de nouvelle dépense')">
+                            <svg class="icon"><use href="#icon-plus"/></svg>
+                            Ajouter une dépense
                         </button>
-                        <button class="btn btn-outline" onclick="switchScreen('balances')">
-                            📊 Soldes & Dettes
-                        </button>
-                        <button class="btn btn-outline btn-sm">Inviter</button>
-                    </div>
-                </div>
-
-                <!-- Barre d'onglets ergonomique (Divulgation progressive) -->
-                <nav class="tab-nav">
-                    <div class="tab-link active" onclick="switchTab(this, 'tab-expenses')">Dépenses (14)</div>
-                    <div class="tab-link" onclick="switchTab(this, 'tab-balances-inner')">Soldes & Remboursements</div>
-                    <div class="tab-link" onclick="switchTab(this, 'tab-members')">Membres (5)</div>
-                </nav>
-
-                <!-- CONTENU ONGLET 1 : DÉPENSES -->
-                <div id="tab-expenses">
-                    <div class="section-header" style="margin-bottom: 1rem;">
-                        <span style="font-size: 0.85rem; color: var(--slate-muted); font-weight: 600;">
-                            Total dépensé : <strong class="tabular" style="color: var(--slate-dark); font-size: 1rem;">642,80 €</strong>
-                        </span>
-                        <input type="text" placeholder="Rechercher une dépense..." style="padding: 0.35rem 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.82rem; font-family: inherit;">
-                    </div>
-
-                    <div class="expense-list">
-                        <!-- Ligne 1 -->
-                        <div class="expense-row">
-                            <div class="expense-main">
-                                <div class="category-icon">🛒</div>
-                                <div>
-                                    <div class="expense-title">Courses Mercadona</div>
-                                    <div class="expense-sub">Payé par <strong>Khalil</strong> • Partagé entre 5 personnes</div>
-                                </div>
-                            </div>
-                            <div class="tabular">
-                                <div class="expense-amount">125,40 €</div>
-                                <div class="expense-share">25,08 € / pers</div>
-                            </div>
-                        </div>
-
-                        <!-- Ligne 2 -->
-                        <div class="expense-row">
-                            <div class="expense-main">
-                                <div class="category-icon">🎟️</div>
-                                <div>
-                                    <div class="expense-title">Billets Sagrada Família</div>
-                                    <div class="expense-sub">Payé par <strong>Gautam</strong> • Partagé entre 5 personnes</div>
-                                </div>
-                            </div>
-                            <div class="tabular">
-                                <div class="expense-amount">150,00 €</div>
-                                <div class="expense-share">30,00 € / pers</div>
-                            </div>
-                        </div>
-
-                        <!-- Ligne 3 -->
-                        <div class="expense-row">
-                            <div class="expense-main">
-                                <div class="category-icon">🍷</div>
-                                <div>
-                                    <div class="expense-title">Tapas & Sangria El Born</div>
-                                    <div class="expense-sub">Payé par <strong>Abdelkader</strong> • Partagé entre 5 personnes</div>
-                                </div>
-                            </div>
-                            <div class="tabular">
-                                <div class="expense-amount">88,20 €</div>
-                                <div class="expense-share">17,64 € / pers</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CONTENU ONGLET 2 : SOLDES DEDANS -->
-                <div id="tab-balances-inner" style="display: none;">
-                    <p style="color: var(--slate-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-                        Voici les règlements optimaux calculés pour équilibrer la cagnotte en un minimum de transactions :
-                    </p>
-                    <div class="debt-cards">
-                        <div class="debt-card">
-                            <div class="debt-flow">
-                                <strong>Gautam</strong>
-                                <span class="debt-arrow">➔</span>
-                                <strong>Khalil</strong>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">24,92 €</span>
-                                <button class="btn btn-outline btn-sm">Régler</button>
-                            </div>
-                        </div>
-
-                        <div class="debt-card">
-                            <div class="debt-flow">
-                                <strong>Thomas</strong>
-                                <span class="debt-arrow">➔</span>
-                                <strong>Abdelkader</strong>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">18,50 €</span>
-                                <button class="btn btn-outline btn-sm">Régler</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CONTENU ONGLET 3 : MEMBRES -->
-                <div id="tab-members" style="display: none;">
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <div class="user-avatar">K</div>
-                                <div>
-                                    <div style="font-weight: 700;">khalil.bouchama (Vous)</div>
-                                    <div style="font-size: 0.78rem; color: var(--slate-muted);">Créateur & Administrateur</div>
-                                </div>
-                            </div>
-                            <span class="badge badge-open">Admin</span>
-                        </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <div class="user-avatar" style="background: #f59e0b;">A</div>
-                                <div>
-                                    <div style="font-weight: 700;">abdelkader.heddi</div>
-                                    <div style="font-size: 0.78rem; color: var(--slate-muted);">Membre actif</div>
-                                </div>
-                            </div>
-                            <span class="badge" style="background: var(--surface-raised);">Membre</span>
-                        </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- ============================================== -->
-        <!-- ÉCRAN 3 : VUE DÉDIÉE SOLDES & ÉQUILIBRE        -->
-        <!-- ============================================== -->
-        <section id="screen-balances" style="display: none;">
-            <div style="margin-bottom: 1rem;">
-                <button class="btn btn-outline btn-sm" onclick="switchScreen('detail')">
-                    ← Retour au détail du pot
+            <!-- Onglets de Segmentation (Divulgation Progressive) -->
+            <div class="segment-tabs">
+                <button class="segment-btn active" onclick="switchDetailTab(this, 'tab-stream')">
+                    <svg class="icon"><use href="#icon-receipt"/></svg>
+                    Dépenses (3)
+                </button>
+                <button class="segment-btn" onclick="switchDetailTab(this, 'tab-settlement')">
+                    <svg class="icon"><use href="#icon-wallet"/></svg>
+                    Soldes & Remboursements (2)
+                </button>
+                <button class="segment-btn" onclick="switchDetailTab(this, 'tab-part')">
+                    <svg class="icon"><use href="#icon-users"/></svg>
+                    Membres (5)
                 </button>
             </div>
 
-            <div class="card" style="margin-bottom: 1.5rem;">
-                <div class="section-header">
-                    <div>
-                        <h2 class="section-title">Soldes Individuels des Membres</h2>
-                        <p style="font-size: 0.85rem; color: var(--slate-muted);">Situation de chaque participant (Payé vs Dû)</p>
-                    </div>
-                    <span class="badge badge-open" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
-                        Total Dépensé : 642,80 €
-                    </span>
-                </div>
+            <!-- ONGLET 1 : TIMELINE CHRONOLOGIQUE -->
+            <div id="tab-stream">
+                <div class="timeline-stream">
+                    <div class="stream-day-separator">Aujourd'hui</div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
-                    <!-- Membre 1 (Créancier) -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: var(--surface-raised); border-radius: var(--radius-md);">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <div class="user-avatar">K</div>
+                    <!-- Dépense 1 -->
+                    <div class="expense-card">
+                        <div class="expense-left">
+                            <div class="expense-cat-icon">
+                                <svg class="icon"><use href="#icon-shopping-bag"/></svg>
+                            </div>
                             <div>
-                                <span style="font-weight: 700;">Khalil</span>
-                                <div style="font-size: 0.8rem; color: var(--slate-muted);">Payé : 240,00 € • Dû : 128,56 €</div>
+                                <div class="expense-label">Courses Mercadona</div>
+                                <div class="expense-detail">Payé par <strong>Khalil</strong> • 5 bénéficiaires</div>
                             </div>
                         </div>
-                        <span class="badge badge-creditor tabular" style="font-size: 0.85rem;">+ 111,44 € (Créancier)</span>
+                        <div class="expense-right">
+                            <div class="expense-cost num">125,40 €</div>
+                            <div class="expense-split-hint num">25,08 € / pers</div>
+                        </div>
                     </div>
 
-                    <!-- Membre 2 (Débiteur) -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: var(--surface-raised); border-radius: var(--radius-md);">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <div class="user-avatar" style="background: #8b5cf6;">G</div>
+                    <!-- Dépense 2 -->
+                    <div class="expense-card">
+                        <div class="expense-left">
+                            <div class="expense-cat-icon">
+                                <svg class="icon"><use href="#icon-coffee"/></svg>
+                            </div>
                             <div>
-                                <span style="font-weight: 700;">Gautam</span>
-                                <div style="font-size: 0.8rem; color: var(--slate-muted);">Payé : 50,00 € • Dû : 128,56 €</div>
+                                <div class="expense-label">Tapas & Boissons El Born</div>
+                                <div class="expense-detail">Payé par <strong>Abdelkader</strong> • 5 bénéficiaires</div>
                             </div>
                         </div>
-                        <span class="badge badge-debtor tabular" style="font-size: 0.85rem;">- 78,56 € (Doit rembourser)</span>
+                        <div class="expense-right">
+                            <div class="expense-cost num">88,20 €</div>
+                            <div class="expense-split-hint num">17,64 € / pers</div>
+                        </div>
+                    </div>
+
+                    <div class="stream-day-separator">Hier</div>
+
+                    <!-- Dépense 3 -->
+                    <div class="expense-card">
+                        <div class="expense-left">
+                            <div class="expense-cat-icon">
+                                <svg class="icon"><use href="#icon-ticket"/></svg>
+                            </div>
+                            <div>
+                                <div class="expense-label">Billets Sagrada Família</div>
+                                <div class="expense-detail">Payé par <strong>Gautam</strong> • 5 bénéficiaires</div>
+                            </div>
+                        </div>
+                        <div class="expense-right">
+                            <div class="expense-cost num">150,00 €</div>
+                            <div class="expense-split-hint num">30,00 € / pers</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Schéma de minimisation des dettes -->
-            <div class="card">
-                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem;">Plan de Remboursement Simplifié</h3>
-                <p style="font-size: 0.85rem; color: var(--slate-muted); margin-bottom: 1.25rem;">
-                    Ces virements permettent de solder intégralement les comptes du groupe :
-                </p>
-                <div class="debt-cards">
-                    <div class="debt-card">
-                        <div class="debt-flow">
-                            <strong>Gautam</strong>
-                            <span class="debt-arrow">➔</span>
-                            <strong>Khalil</strong>
+            <!-- ONGLET 2 : CALCUL DES SOLDES & REMBOURSEMENT SIMPLIFIÉ -->
+            <div id="tab-settlement" style="display: none;">
+                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                    
+                    <div class="settlement-card">
+                        <div class="settlement-actors">
+                            <div class="actor-tag">
+                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">G</span>
+                                Gautam
+                            </div>
+                            <div class="arrow-badge">
+                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
+                            </div>
+                            <div class="actor-tag">
+                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">K</span>
+                                Khalil
+                            </div>
                         </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="num" style="font-weight: 800; font-size: 1.15rem; color: var(--text-main);">24,92 €</span>
+                            <button class="btn btn-secondary btn-sm">Marquer remboursé</button>
+                        </div>
+                    </div>
+
+                    <div class="settlement-card">
+                        <div class="settlement-actors">
+                            <div class="actor-tag">
+                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #059669; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">T</span>
+                                Thomas
+                            </div>
+                            <div class="arrow-badge">
+                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
+                            </div>
+                            <div class="actor-tag">
+                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">A</span>
+                                Abdelkader
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="num" style="font-weight: 800; font-size: 1.15rem; color: var(--text-main);">18,50 €</span>
+                            <button class="btn btn-secondary btn-sm">Marquer remboursé</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ONGLET 3 : MEMBRES -->
+            <div id="tab-part" style="display: none;">
+                <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+                    <div style="padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border);">
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span class="tabular" style="font-weight: 800; color: var(--primary); font-size: 1.15rem;">78,56 €</span>
-                            <button class="btn btn-outline btn-sm">Marquer payé</button>
+                            <span style="width: 28px; height: 28px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">K</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.92rem;">Khalil Bouchama</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">Créateur & Administrateur</div>
+                            </div>
                         </div>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Admin</span>
+                    </div>
+
+                    <div style="padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="width: 28px; height: 28px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">A</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.92rem;">Abdelkader Heddi</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">Membre</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Membre</span>
                     </div>
                 </div>
             </div>
-        </section>
+
+        </main>
 
         <!-- ============================================== -->
-        <!-- ÉCRAN 4 : ÉTAT VIDE (EMPTY STATE DIRECTIONNEL) -->
+        <!-- VUE 3 : ÉTAT VIDE (EMPTY STATE SOBRE)          -->
         <!-- ============================================== -->
-        <section id="screen-empty" style="display: none;">
-            <div class="empty-state">
-                <div class="empty-icon">✨</div>
-                <h2 class="empty-title">Aucune dépense pour l'instant</h2>
-                <p class="empty-desc">
-                    Ce porte-monnaie est tout neuf ! Ajoutez votre premier achat (courses, billets, restaurant) pour commencer à partager équitablement les frais.
+        <main id="view-empty" style="display: none;">
+            <div class="empty-boundary">
+                <div class="empty-icon-ring">
+                    <svg class="icon-lg"><use href="#icon-receipt"/></svg>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 700;">Aucune dépense enregistrée</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 380px;">
+                    Partagez les premiers frais de ce pot en renseignant le montant et les participants concernés.
                 </p>
-                <button class="btn btn-primary" onclick="switchScreen('detail')">
-                    + Ajouter la première dépense
-                </button>
+                <div style="margin-top: 0.5rem;">
+                    <button class="btn btn-primary" onclick="navigateScreen('detail')">
+                        <svg class="icon"><use href="#icon-plus"/></svg>
+                        Ajouter la première dépense
+                    </button>
+                </div>
             </div>
-        </section>
+        </main>
 
-    </main>
+    </div>
 
-    <footer style="text-align: center; padding: 2rem 1.5rem; color: var(--slate-muted); font-size: 0.82rem; border-top: 1px solid var(--border-subtle); background: white;">
-        <p>Les Bons Comptes — Master 2 MIAGE / IF-Django (Romain Rouvoy & Gaëtan Hasbroucq)</p>
-        <p style="margin-top: 0.25rem;">Binôme : Abdelkader HEDDI • Gautam DEMEULEMEESTER • Khalil BOUCHAMA</p>
-    </footer>
-
+    <!-- JAVASCRIPT DE NAVIGATION DANS LA MAQUETTE -->
     <script>
-        function switchScreen(screenId) {
-            document.getElementById('screen-dashboard').style.display = 'none';
-            document.getElementById('screen-detail').style.display = 'none';
-            document.getElementById('screen-balances').style.display = 'none';
-            document.getElementById('screen-empty').style.display = 'none';
+        function navigateScreen(screen) {
+            document.getElementById('view-dash').style.display = 'none';
+            document.getElementById('view-detail').style.display = 'none';
+            document.getElementById('view-empty').style.display = 'none';
 
-            document.getElementById('screen-' + screenId).style.display = 'block';
+            document.getElementById('view-' + screen).style.display = 'block';
 
-            // Mise à jour des boutons du switch
-            const btns = document.querySelectorAll('.mockup-btn');
-            btns.forEach(b => b.classList.remove('active'));
-            if (screenId === 'dashboard') btns[0].classList.add('active');
-            if (screenId === 'detail') btns[1].classList.add('active');
-            if (screenId === 'balances') btns[2].classList.add('active');
-            if (screenId === 'empty') btns[3].classList.add('active');
+            const tabs = document.querySelectorAll('.mockup-tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (screen === 'dash') tabs[0].classList.add('active');
+            if (screen === 'detail') tabs[1].classList.add('active');
+            if (screen === 'empty') tabs[2].classList.add('active');
         }
 
-        function switchTab(clickedTab, tabId) {
-            // Retirer active sur les onglets
-            const tabs = clickedTab.parentElement.querySelectorAll('.tab-link');
-            tabs.forEach(t => t.classList.remove('active'));
-            clickedTab.classList.add('active');
+        function switchDetailTab(clicked, tabId) {
+            const btns = clicked.parentElement.querySelectorAll('.segment-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            clicked.classList.add('active');
 
-            // Cacher tous les onglets
-            document.getElementById('tab-expenses').style.display = 'none';
-            document.getElementById('tab-balances-inner').style.display = 'none';
-            document.getElementById('tab-members').style.display = 'none';
+            document.getElementById('tab-stream').style.display = 'none';
+            document.getElementById('tab-settlement').style.display = 'none';
+            document.getElementById('tab-part').style.display = 'none';
 
-            // Afficher le sélectionné
             document.getElementById(tabId).style.display = 'block';
         }
     </script>
