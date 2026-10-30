@@ -297,3 +297,85 @@ Si l'utilisateur n'a aucune cagnotte, le gabarit n'affiche plus un triste paragr
 | **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
 | **Préservation du Contexte Django** | `wallets`, `invitations`, `pending_settlements` consommés sans régression | **100 % préservé** |
 | **Formulaires d'acceptation/refus** | Balises `<form method="post">` et jetons `{% csrf_token %}` conservés | **100 % fonctionnel** |
+
+
+---
+
+## 📘 Étape 5 / Commit 5 : Fiche Détaillée avec Onglets Contextuels et Flux de Dépenses
+
+### 1. Intitulé Proposé pour le Commit (GitLab)
+```text
+feat(wallets): refonte de la fiche detaillee avec onglets contextuels et flux de depenses
+
+- Remplacement des emojis par des symboles vectoriels SVG (#icon-chart, #icon-shield, #icon-download, #icon-lock)
+- Structuration en onglets progressifs accessibles (Depenses, Participants, Invitations) en JavaScript pur
+- Alignement strict des montants financiers en chiffres tabulaires (.num, font-variant-numeric: tabular-nums)
+- Composition avec les composants atomiques avatar et empty_state
+- Preservation rigoureuse des formulaires securises de suppression et de cloture avec confirmation
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 5
+
+#### A. Le Principe de "Progressive Disclosure" (Divulgation Progressive)
+Dans l'ancienne version, la page empilait verticalement l'ensemble des données : l'en-tête, la description, la liste paginée des dépenses, le bloc des participants, puis le bloc des invitations en attente. Sur un écran d'ordinateur portable ou sur smartphone, l'utilisateur devait faire défiler plusieurs pages de hauteur pour atteindre les informations de membres ou administrer le groupe.
+
+La technique UX de **Progressive Disclosure** consiste à ne présenter à l'utilisateur que l'information dont il a besoin à l'instant T, tout en laissant les autres sections accessibles en un seul clic sans rechargement de page :
+- **Onglet 1 : Dépenses (`#tab-pane-expenses`)** : Le cœur de vie du porte-monnaie, avec le flux chronologique des dépenses, les parts individuelles et la pagination Django.
+- **Onglet 2 : Participants (`#tab-pane-members`)** : La liste des membres avec leurs avatars générés, adresses email et rôles (badge Administrateur avec icône bouclier `#icon-shield` ou badge Membre).
+- **Onglet 3 : Invitations en attente (`#tab-pane-invitations`)** : Affiché uniquement si l'utilisateur est administrateur et qu'il y a des invitations non encore acceptées.
+
+#### B. JavaScript Léger et Accessible (Zero Dependency)
+Pour basculer d'un onglet à l'autre sans alourdir l'application avec un framework JavaScript tiers (comme Vue, React ou Bootstrap JS), nous avons implémenté une fonction native pure :
+```javascript
+function switchDetailTab(tabName) {
+    var panes = ['expenses', 'members', 'invitations'];
+    panes.forEach(function(pane) {
+        var paneEl = document.getElementById('tab-pane-' + pane);
+        var btnEl = document.getElementById('tab-btn-' + pane);
+        if (paneEl && btnEl) {
+            if (pane === tabName) {
+                paneEl.style.display = 'block';
+                btnEl.classList.add('active');
+                btnEl.setAttribute('aria-selected', 'true');
+            } else {
+                paneEl.style.display = 'none';
+                btnEl.classList.remove('active');
+                btnEl.setAttribute('aria-selected', 'false');
+            }
+        }
+    });
+}
+```
+Cette fonction garantit également l'accessibilité numérique en mettant à jour dynamiquement l'attribut standard WAI-ARIA `aria-selected` pour les lecteurs d'écran.
+
+#### C. Éradication des Émojis et Précision Vectorielle
+Auparavant, les actions utilisaient des émojis (📊, 📥, 🔒, 💳).  
+Sur le plan technique et graphique, les émojis posent trois soucis majeurs :
+1. Ils ont un rendu hétérogène et imprévisible selon la plateforme (Windows Segoe Emoji vs Apple AppleColorEmoji vs Android Noto).
+2. Ils ne s'alignent pas correctement avec la ligne de base du texte (`baseline alignment`).
+3. Ils ne peuvent pas changer de couleur au survol de la souris.
+
+Nous les avons remplacés par des icônes SVG précises et cohérentes :
+- `#icon-chart` pour l'accès aux soldes et au bilan de répartition.
+- `#icon-download` pour l'exportation du fichier CSV.
+- `#icon-lock` pour la clôture sécurisée du pot.
+- `#icon-trash` pour la suppression d'une dépense.
+- `#icon-shield` pour le rôle d'administrateur.
+
+#### D. Préservation Absolue de la Sécurité CSRF & Intégrité Métier
+Toutes les actions sensibles conservent leurs garanties de sécurité strictes développées aux volets précédents :
+- Le formulaire de clôture du pot (`wallets:close`) est bien une requête `POST` sécurisée par un jeton `{% csrf_token %}` et protégée par une boîte de confirmation native `confirm(...)`.
+- La suppression d'une dépense (`expenses:delete`) reste protégée par les mêmes règles de contrôle d'accès : le bouton n'apparaît que pour le payeur ou le créateur du pot, sous réserve que le pot soit toujours à l'état `OUVERT`.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Sécurité des formulaires** | Présence des jetons `{% csrf_token %}` et dialogues de confirmation | **100 % conforme** |
+| **Intégrité de la pagination** | Navigation multipage fonctionnelle (`?page=...`) | **100 % préservée** |
+| **Code métier de Gautam & Abdelkader** | Zéro modification dans `models.py` et `services.py` | **100 % intouché** |
