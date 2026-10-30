@@ -207,3 +207,40 @@
   - **Tests unitaires** : **26 tests réussis sur 26 (100% de succès)**.
   - **Flake8 / Linter** : **0 warning, 0 erreur**.
   - **Code métier** : 0 modification (100% préservé).
+
+
+---
+
+### Étape 11 : Avancement Volet 4 — Commits 2 à 5 (UI/UX Moderne & Composants Modulaires)
+- **Objectif & Cadrage** :
+  - Déployer méthodiquement la refonte graphique écran par écran selon le plan de commit validé.
+  - Bannir l'« AI Slop » : suppression des languettes colorées, élimination complète des émojis au profit d'icônes SVG vectorielles, suppression des bordures criardes.
+  - Introduire une architecture frontend modulaire en Django MVT via des composants partiels réutilisables (`{% include ... %}`).
+- **Réalisations Clés Déployées sur GitLab (`if-django-2026`)** :
+  1. **Commit 2 (`5c8b35a`) — Sprite SVG Vectoriel & Composants Réutilisables** :
+     - Création de `components/icons.html` avec balises `<symbol viewBox="0 0 24 24">` stylables via `currentColor`.
+     - Composant atomique `components/avatar.html` avec calcul de l'initiale et palette déterministe.
+     - Composant d'état vide directionnel `components/empty_state.html` guidant l'utilisateur vers son action clé.
+  2. **Commit 3 (`ff8de26`) — Conteneur Base, Navbar & Bannières Flash** :
+     - Préchargement DNS/TLS Google Fonts (`preconnect`) pour la police *Plus Jakarta Sans*.
+     - Refonte de la navigation avec logo vectoriel et pilule avatar utilisateur.
+     - Notifications Django (`messages`) sous forme de toasts inline épurés sans encadré lourd.
+  3. **Commit 4 (`3fe220b`) — Tableau de Bord Asymétrique & Invitations Compactes** :
+     - Refonte de `wallet_list.html` : remplacement de la carte brute d'invitation par un toast compact (`.toast-banner`).
+     - Grille asymétrique Flexbox (`.col-main` pour les cagnottes, `.col-side` pour les règlements rapides).
+     - Cartes de cagnottes compactes avec pastilles SVG et pile d'avatars superposés.
+  4. **Commit 5 (`4637127`) — Fiche Détaillée avec Onglets Progressifs & Flux de Dépenses** :
+     - Refonte de `wallet_detail.html` : structuration en 3 onglets fluides en JavaScript pur (*Dépenses*, *Participants*, *Invitations*).
+     - Remplacement complet des émojis par des symboles SVG (`#icon-chart`, `#icon-shield`, `#icon-download`, `#icon-lock`).
+     - Alignement comptable des montants en chiffres tabulaires (`.num`, `font-variant-numeric: tabular-nums`).
+     - Préservation stricte de la sécurité CSRF sur la clôture du pot et la suppression de dépenses.
+- **Réalisations Pédagogiques Déployées sur GitHub (`IF-Django`)** :
+  - Mise à jour détaillée de `docs/VOLET_4_GUIDE_UI_UX.md` documentant chaque étape avec décryptage didactique pour un étudiant de master MIAGE.
+- **Indicateurs & Validation Qualité** :
+  - **Tests unitaires Django** : **26/26 tests réussis (100% de succès)**.
+  - **Code métier** : 0 altération dans les modèles ou services.
+  - **État Git** : 5 commits poussés sur GitLab, dépôt propre et synchronisé.
+  - **Reste à faire pour la prochaine séance** :
+    - Commit 6 : Vue des soldes (`balances.html`) et formulaires financiers (`expense_form.html`, `wallet_form.html`, `wallet_invite.html`).
+    - Commit 7 : Écrans d'authentification (`login.html`, `register.html`, `profile.html`).
+    - Commit 8 : Audit visuel final réactif et revue d'intégrité globale.
