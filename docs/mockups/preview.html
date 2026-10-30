@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Bons Comptes — Design System & Maquette UX (V2 Pro)</title>
+    <title>Les Bons Comptes — Design System V2.1 (Icônes SVG Parfaitement Centrées)</title>
     <!-- Police Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Palette Haute Définition Fintech (Inspirée Wise / Linear / Revolut 2.0) */
+            /* Palette Haute Définition Fintech */
             --bg: #f8fafc;
             --surface: #ffffff;
             --surface-hover: #f1f5f9;
@@ -20,8 +20,8 @@
             --border-hover: #cbd5e1;
             
             --text-main: #090d16;
-            --text-muted: #526077;
-            --text-tertiary: #8a99ad;
+            --text-muted: #475569;
+            --text-tertiary: #94a3b8;
 
             /* Accent Signature Émeraude */
             --brand: #059669;
@@ -43,9 +43,9 @@
             --radius-lg: 14px;
             --radius-pill: 9999px;
 
-            /* Ombres discrètes (zéro effet blurry AI) */
-            --shadow-subtle: 0 1px 2px rgba(9, 13, 22, 0.04);
-            --shadow-float: 0 8px 24px -4px rgba(9, 13, 22, 0.08), 0 2px 6px -1px rgba(9, 13, 22, 0.04);
+            /* Ombres discrètes */
+            --shadow-subtle: 0 1px 2px rgba(9, 13, 22, 0.05);
+            --shadow-float: 0 4px 12px rgba(9, 13, 22, 0.06);
         }
 
         * {
@@ -65,13 +65,12 @@
             flex-direction: column;
         }
 
-        /* Chiffres tabulaires stricts pour les données monétaires */
         .num {
             font-variant-numeric: tabular-nums lining-nums;
             letter-spacing: -0.02em;
         }
 
-        /* Barres d'outils et sélecteur de maquette */
+        /* Barre d'outils de la maquette */
         .mockup-header {
             background-color: var(--text-main);
             color: white;
@@ -130,23 +129,24 @@
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.65rem;
             text-decoration: none;
             color: var(--text-main);
             font-weight: 800;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             letter-spacing: -0.02em;
         }
 
         .brand-icon-box {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             background: var(--brand);
             color: white;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .nav-links {
@@ -166,7 +166,7 @@
             transition: all 0.15s;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -180,15 +180,86 @@
             gap: 0.75rem;
         }
 
-        /* Boutons Primitifs */
+        /* ================================================= */
+        /* SYSTÈME D'ICÔNES SVG PARFAITEMENT CENTRÉES        */
+        /* ================================================= */
+        .icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+
+        .icon-sm {
+            width: 15px;
+            height: 15px;
+            stroke-width: 2.2;
+        }
+
+        .icon-md {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.2;
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.2;
+        }
+
+        /* Pastilles d'icônes avec centrage absolu Flexbox et contrastes francs */
+        .icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            transition: transform 0.15s;
+        }
+
+        .icon-badge-emerald {
+            background: #ecfdf5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+
+        .icon-badge-blue {
+            background: #f0f9ff;
+            color: #0369a1;
+            border-color: #bae6fd;
+        }
+
+        .icon-badge-amber {
+            background: #fffbeb;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+        .icon-badge-indigo {
+            background: #eef2ff;
+            color: #4338ca;
+            border-color: #c7d2fe;
+        }
+
+        /* Boutons Primitifs avec alignement d'icônes précis */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.45rem;
-            padding: 0.5rem 0.95rem;
+            gap: 0.5rem;
+            padding: 0.55rem 1rem;
             border-radius: var(--radius-sm);
-            font-size: 0.86rem;
+            font-size: 0.88rem;
             font-weight: 600;
             font-family: inherit;
             cursor: pointer;
@@ -196,15 +267,22 @@
             border: 1px solid transparent;
             transition: all 0.15s ease;
             white-space: nowrap;
+            line-height: 1;
+        }
+
+        .btn .icon {
+            margin: 0;
         }
 
         .btn-primary {
             background-color: var(--brand);
             color: white;
+            box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
         }
 
         .btn-primary:hover {
             background-color: var(--brand-dark);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
@@ -230,32 +308,18 @@
         }
 
         .btn-sm {
-            padding: 0.35rem 0.65rem;
-            font-size: 0.8rem;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.82rem;
         }
 
         .btn-icon-only {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             padding: 0;
             border-radius: var(--radius-sm);
-        }
-
-        /* SVG Icons Styling */
-        .icon {
-            width: 16px;
-            height: 16px;
-            stroke-width: 2;
-            stroke: currentColor;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            flex-shrink: 0;
-        }
-
-        .icon-lg {
-            width: 20px;
-            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Conteneur Applicatif Asymétrique */
@@ -267,12 +331,12 @@
             flex: 1;
         }
 
-        /* Barre d'alerte compacte (Remplacement élégant de l'encadré à bordure de couleur) */
+        /* Barre d'alerte compacte */
         .toast-banner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.65rem 1rem;
+            padding: 0.75rem 1.15rem;
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
@@ -284,21 +348,21 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 0.86rem;
+            font-size: 0.88rem;
         }
 
         .toast-tag {
             background: #f1f5f9;
             color: var(--text-main);
-            padding: 0.2rem 0.55rem;
+            padding: 0.25rem 0.55rem;
             border-radius: var(--radius-xs);
-            font-size: 0.72rem;
+            font-size: 0.74rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        /* Layout Asymétrique Flexbox (Main Content + Context Sidebar) */
+        /* Layout Asymétrique Flexbox */
         .layout-grid {
             display: flex;
             gap: 1.5rem;
@@ -307,11 +371,11 @@
 
         .col-main {
             flex: 1;
-            min-width: 0; /* Évite les débordements flexbox */
+            min-width: 0;
         }
 
         .col-side {
-            width: 340px;
+            width: 350px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -327,7 +391,7 @@
             }
         }
 
-        /* Dashboard Metric Strip */
+        /* Metric Strip */
         .metric-strip {
             display: flex;
             align-items: center;
@@ -391,23 +455,18 @@
             gap: 0.5rem;
         }
 
-        /* Cartes de Cagnottes (Flexbox Card avec micro-indicateurs) */
-        .wallet-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
-        }
-
+        /* Wallet Cards Flexbox */
         .wallet-item {
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            padding: 1.15rem 1.35rem;
+            padding: 1.1rem 1.35rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1.25rem;
             cursor: pointer;
+            margin-bottom: 0.85rem;
             transition: all 0.15s ease;
             text-decoration: none;
             color: inherit;
@@ -423,23 +482,6 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            min-width: 0;
-        }
-
-        .wallet-icon-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-sm);
-            background: var(--surface-hover);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            flex-shrink: 0;
-            border: 1px solid var(--border);
-        }
-
-        .wallet-meta {
             min-width: 0;
         }
 
@@ -467,29 +509,14 @@
             flex-shrink: 0;
         }
 
-        .wallet-balance {
-            text-align: right;
-        }
-
-        .wallet-balance-num {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .wallet-balance-sub {
-            font-size: 0.74rem;
-            color: var(--text-tertiary);
-        }
-
-        /* Avatar Stack Circulaire */
         .avatar-pile {
             display: flex;
             align-items: center;
         }
 
         .avatar-node {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: var(--radius-pill);
             background: #e2e8f0;
             color: var(--text-main);
@@ -536,7 +563,7 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            padding: 0.85rem 1.15rem;
+            padding: 0.9rem 1.25rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -551,30 +578,19 @@
         .expense-left {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-        }
-
-        .expense-cat-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--surface-hover);
-            color: var(--text-muted);
+            gap: 1rem;
         }
 
         .expense-label {
             font-weight: 600;
-            font-size: 0.92rem;
+            font-size: 0.94rem;
             color: var(--text-main);
         }
 
         .expense-detail {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-top: 0.1rem;
+            margin-top: 0.15rem;
         }
 
         .expense-right {
@@ -598,7 +614,7 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
-            padding: 1rem 1.15rem;
+            padding: 1.1rem 1.25rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -608,8 +624,8 @@
         .settlement-actors {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.88rem;
+            gap: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .actor-tag {
@@ -617,18 +633,19 @@
             color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.45rem;
         }
 
         .arrow-badge {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: var(--radius-pill);
             background: var(--brand-subtle);
             color: var(--brand);
+            flex-shrink: 0;
         }
 
         /* Pill Tabs */
@@ -644,8 +661,8 @@
         .segment-btn {
             background: transparent;
             border: none;
-            padding: 0.4rem 0.9rem;
-            font-size: 0.82rem;
+            padding: 0.45rem 0.95rem;
+            font-size: 0.84rem;
             font-weight: 600;
             color: var(--text-muted);
             border-radius: var(--radius-xs);
@@ -653,7 +670,8 @@
             font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            transition: all 0.15s;
         }
 
         .segment-btn.active {
@@ -662,12 +680,12 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.06);
         }
 
-        /* Empty State Élégant & Minimaliste */
+        /* Empty State */
         .empty-boundary {
             background: white;
             border: 1px dashed var(--border-hover);
             border-radius: var(--radius-lg);
-            padding: 3rem 1.5rem;
+            padding: 3.5rem 1.5rem;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -676,8 +694,8 @@
         }
 
         .empty-icon-ring {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: var(--radius-pill);
             background: var(--surface-hover);
             display: flex;
@@ -690,42 +708,99 @@
 </head>
 <body>
 
-    <!-- SVG SPRITE DEPLOYMENT (Icônes Vectorielles Précises type Lucide / Feather) -->
-    <svg style="display: none;">
-        <defs>
-            <g id="icon-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-8 8H5a2 2 0 0 1-2-2V6"/></g>
-            <g id="icon-plus"><path d="M12 5v14M5 12h14"/></g>
-            <g id="icon-check"><polyline points="20 6 9 17 4 12"/></g>
-            <g id="icon-x"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></g>
-            <g id="icon-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></g>
-            <g id="icon-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></g>
-            <g id="icon-receipt"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-8M16 12h-8M12 16h-4"/></g>
-            <g id="icon-shopping-bag"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></g>
-            <g id="icon-ticket"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 17v2M13 11v2"/></g>
-            <g id="icon-coffee"><path d="M10 2v2M14 2v2M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/></g>
-            <g id="icon-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></g>
-            <g id="icon-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g>
-            <g id="icon-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></g>
-            <g id="icon-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></g>
-        </defs>
+    <!-- ======================================================== -->
+    <!-- SPRITE SVG UNIFIÉ AVEC VIEWBOX STICTE (24x24) ET SYMBOLS -->
+    <!-- ======================================================== -->
+    <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="icon-wallet" viewBox="0 0 24 24">
+            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-8 8H5a2 2 0 0 1-2-2V6"/>
+            <circle cx="16" cy="14" r="1.5" fill="currentColor"/>
+        </symbol>
+
+        <symbol id="icon-plus" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+        </symbol>
+
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"/>
+        </symbol>
+
+        <symbol id="icon-x" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+        </symbol>
+
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+        </symbol>
+
+        <symbol id="icon-users" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </symbol>
+
+        <symbol id="icon-receipt" viewBox="0 0 24 24">
+            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/>
+            <path d="M16 8h-8M16 12h-8M12 16h-4"/>
+        </symbol>
+
+        <symbol id="icon-shopping-bag" viewBox="0 0 24 24">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+            <path d="M3 6h18"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+        </symbol>
+
+        <symbol id="icon-ticket" viewBox="0 0 24 24">
+            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+            <path d="M13 5v2M13 17v2M13 11v2"/>
+        </symbol>
+
+        <symbol id="icon-coffee" viewBox="0 0 24 24">
+            <path d="M10 2v2M14 2v2M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="1" x2="6" y2="4"/>
+        </symbol>
+
+        <symbol id="icon-download" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+        </symbol>
+
+        <symbol id="icon-lock" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </symbol>
+
+        <symbol id="icon-bell" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </symbol>
+
+        <symbol id="icon-filter" viewBox="0 0 24 24">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </symbol>
     </svg>
 
-    <!-- BARRE TECHNIQUE DE SÉLECTION D'ÉCRAN (MOCKUP CONTROLLER) -->
+    <!-- BARRE TECHNIQUE DE CONTRÔLE -->
     <div class="mockup-header">
-        <div style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.85rem;">
             <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span>
-            <strong>MAQUETTE V2 ÉPURÉE</strong>
+            <strong>MAQUETTE V2.1 — ICÔNES SVG OPTIQUES & CENTRÉES</strong>
             <span style="opacity: 0.4;">|</span>
-            <span style="opacity: 0.8;">Élimination formelle du Slop AI & Flexbox Adaptable</span>
+            <span style="opacity: 0.8;">Contraste franc & géométrie stricte</span>
         </div>
         <div class="mockup-controls">
             <button class="mockup-tab-btn active" onclick="navigateScreen('dash')">1. Mes Cagnottes</button>
-            <button class="mockup-tab-btn" onclick="navigateScreen('detail')">2. Vue Cagnotte (Dépenses & Soldes)</button>
-            <button class="mockup-tab-btn" onclick="navigateScreen('empty')">3. État Vide (Empty State)</button>
+            <button class="mockup-tab-btn" onclick="navigateScreen('detail')">2. Détail Cagnotte</button>
+            <button class="mockup-tab-btn" onclick="navigateScreen('empty')">3. État Vide</button>
         </div>
     </div>
 
-    <!-- NAVIGATION PRINCIPALE (STYLE FINTECH SOBRE) -->
+    <!-- NAVBAR PRINCIPALE -->
     <header class="navbar">
         <div class="nav-left">
             <a href="#" class="brand-logo">
@@ -748,42 +823,41 @@
 
         <div class="nav-right">
             <button class="btn btn-ghost btn-icon-only" title="Notifications">
-                <svg class="icon"><use href="#icon-bell"/></svg>
+                <svg class="icon-md"><use href="#icon-bell"/></svg>
             </button>
-            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.65rem; background: var(--surface-hover); border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600;">
-                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--text-main); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">K</span>
+            <div style="display: flex; align-items: center; gap: 0.65rem; padding: 0.35rem 0.75rem; background: var(--surface-hover); border-radius: var(--radius-sm); font-size: 0.84rem; font-weight: 600;">
+                <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--text-main); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">K</span>
                 khalil.b
             </div>
         </div>
     </header>
 
-    <!-- CORPS DE PAGE APPLICATIF -->
     <div class="app-shell">
 
         <!-- ============================================== -->
-        <!-- VUE 1 : TABLEAU DE BORD « MES CAGNOTTES »      -->
+        <!-- VUE 1 : DASHBOARD « MES CAGNOTTES »            -->
         <!-- ============================================== -->
         <main id="view-dash">
 
-            <!-- Notification Inline Simple (Pas de languette de couleur baveuse) -->
+            <!-- Toast Notification (Centrée, épurée, boutons SVG) -->
             <div class="toast-banner">
                 <div class="toast-content">
                     <span class="toast-tag">Invitation</span>
-                    <span><strong>Abdelkader</strong> vous a invité au pot <strong>« Anniversaire Thomas »</strong></span>
+                    <span><strong>Abdelkader</strong> vous invite à rejoindre le pot <strong>« Anniversaire Thomas »</strong></span>
                 </div>
-                <div style="display: flex; gap: 0.4rem;">
+                <div style="display: flex; gap: 0.5rem;">
                     <button class="btn btn-primary btn-sm">
-                        <svg class="icon"><use href="#icon-check"/></svg>
+                        <svg class="icon-sm"><use href="#icon-check"/></svg>
                         Accepter
                     </button>
                     <button class="btn btn-secondary btn-sm" style="color: var(--negative);">
-                        <svg class="icon"><use href="#icon-x"/></svg>
+                        <svg class="icon-sm"><use href="#icon-x"/></svg>
                         Refuser
                     </button>
                 </div>
             </div>
 
-            <!-- Bandeau Métrique Synthétique -->
+            <!-- Bandeau métrique synthétique -->
             <div class="metric-strip">
                 <div class="metric-item">
                     <span class="metric-label">Position Nette</span>
@@ -808,141 +882,138 @@
             <!-- Grille Asymétrique Flexbox -->
             <div class="layout-grid">
                 
-                <!-- COLONNE PRINCIPALE : LISTE DES CAGNOTTES -->
+                <!-- COLONNE PRINCIPALE : CAGNOTTES -->
                 <div class="col-main">
                     <div class="view-header">
                         <h2 class="view-title">
                             Vos Portes-Monnaies
                         </h2>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary btn-sm">
-                                <svg class="icon"><use href="#icon-search"/></svg>
-                                Filtrer
-                            </button>
+                        <button class="btn btn-secondary btn-sm">
+                            <svg class="icon-sm"><use href="#icon-filter"/></svg>
+                            Filtrer
+                        </button>
+                    </div>
+
+                    <!-- Pot 1 -->
+                    <div class="wallet-item" onclick="navigateScreen('detail')">
+                        <div class="wallet-info">
+                            <div class="icon-badge icon-badge-emerald">
+                                <svg class="icon-md"><use href="#icon-wallet"/></svg>
+                            </div>
+                            <div style="min-width: 0;">
+                                <div class="wallet-title">Vacances Barcelone 2026</div>
+                                <div class="wallet-sub">5 participants • Créé par vous</div>
+                            </div>
+                        </div>
+                        <div class="wallet-status">
+                            <div class="avatar-pile">
+                                <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                <div class="avatar-node" style="background:#d97706; color:white;">A</div>
+                                <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="num" style="font-size: 1rem; font-weight: 700; color: var(--positive);">+ 28,00 €</div>
+                                <div style="font-size: 0.74rem; color: var(--text-tertiary);">On vous doit</div>
+                            </div>
+                            <div style="color: var(--text-tertiary); display: flex; align-items: center;">
+                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="wallet-stack">
-                        <!-- Pot 1 -->
-                        <div class="wallet-item" onclick="navigateScreen('detail')">
-                            <div class="wallet-info">
-                                <div class="wallet-icon-badge">
-                                    <svg class="icon-lg"><use href="#icon-wallet"/></svg>
-                                </div>
-                                <div class="wallet-meta">
-                                    <div class="wallet-title">Vacances Barcelone 2026</div>
-                                    <div class="wallet-sub">
-                                        <span>5 participants</span>
-                                        <span>•</span>
-                                        <span>Créé par vous</span>
-                                    </div>
-                                </div>
+                    <!-- Pot 2 -->
+                    <div class="wallet-item">
+                        <div class="wallet-info">
+                            <div class="icon-badge icon-badge-amber">
+                                <svg class="icon-md"><use href="#icon-shopping-bag"/></svg>
                             </div>
-                            <div class="wallet-status">
-                                <div class="avatar-pile">
-                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
-                                    <div class="avatar-node" style="background:#d97706; color:white;">A</div>
-                                    <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
-                                </div>
-                                <div class="wallet-balance">
-                                    <div class="wallet-balance-num positive num">+ 28,00 €</div>
-                                    <div class="wallet-balance-sub">On vous doit</div>
-                                </div>
-                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
+                            <div style="min-width: 0;">
+                                <div class="wallet-title">Colocation MIAGE Lille</div>
+                                <div class="wallet-sub">3 participants • Créé par Abdelkader</div>
                             </div>
                         </div>
-
-                        <!-- Pot 2 -->
-                        <div class="wallet-item">
-                            <div class="wallet-info">
-                                <div class="wallet-icon-badge">
-                                    <svg class="icon-lg"><use href="#icon-shopping-bag"/></svg>
-                                </div>
-                                <div class="wallet-meta">
-                                    <div class="wallet-title">Colocation MIAGE Lille</div>
-                                    <div class="wallet-sub">
-                                        <span>3 participants</span>
-                                        <span>•</span>
-                                        <span>Créé par Abdelkader</span>
-                                    </div>
-                                </div>
+                        <div class="wallet-status">
+                            <div class="avatar-pile">
+                                <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                <div class="avatar-node" style="background:#d97706; color:white;">A</div>
                             </div>
-                            <div class="wallet-status">
-                                <div class="avatar-pile">
-                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
-                                    <div class="avatar-node" style="background:#d97706; color:white;">A</div>
-                                </div>
-                                <div class="wallet-balance">
-                                    <div class="wallet-balance-num negative num">- 15,50 €</div>
-                                    <div class="wallet-balance-sub">Vous devez</div>
-                                </div>
-                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
+                            <div style="text-align: right;">
+                                <div class="num" style="font-size: 1rem; font-weight: 700; color: var(--negative);">- 15,50 €</div>
+                                <div style="font-size: 0.74rem; color: var(--text-tertiary);">Vous devez</div>
+                            </div>
+                            <div style="color: var(--text-tertiary); display: flex; align-items: center;">
+                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Pot 3 -->
-                        <div class="wallet-item">
-                            <div class="wallet-info">
-                                <div class="wallet-icon-badge">
-                                    <svg class="icon-lg"><use href="#icon-ticket"/></svg>
-                                </div>
-                                <div class="wallet-meta">
-                                    <div class="wallet-title">Roadtrip Alpes 2026</div>
-                                    <div class="wallet-sub">
-                                        <span>4 participants</span>
-                                        <span>•</span>
-                                        <span>Créé par Gautam</span>
-                                    </div>
-                                </div>
+                    <!-- Pot 3 -->
+                    <div class="wallet-item">
+                        <div class="wallet-info">
+                            <div class="icon-badge icon-badge-indigo">
+                                <svg class="icon-md"><use href="#icon-ticket"/></svg>
                             </div>
-                            <div class="wallet-status">
-                                <div class="avatar-pile">
-                                    <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
-                                    <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
-                                </div>
-                                <div class="wallet-balance">
-                                    <div class="wallet-balance-num positive num">+ 30,00 €</div>
-                                    <div class="wallet-balance-sub">On vous doit</div>
-                                </div>
-                                <svg class="icon" style="color: var(--text-tertiary);"><use href="#icon-arrow-right"/></svg>
+                            <div style="min-width: 0;">
+                                <div class="wallet-title">Roadtrip Alpes 2026</div>
+                                <div class="wallet-sub">4 participants • Créé par Gautam</div>
+                            </div>
+                        </div>
+                        <div class="wallet-status">
+                            <div class="avatar-pile">
+                                <div class="avatar-node" style="background:#0284c7; color:white;">K</div>
+                                <div class="avatar-node" style="background:#7c3aed; color:white;">G</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="num" style="font-size: 1rem; font-weight: 700; color: var(--positive);">+ 30,00 €</div>
+                                <div style="font-size: 0.74rem; color: var(--text-tertiary);">On vous doit</div>
+                            </div>
+                            <div style="color: var(--text-tertiary); display: flex; align-items: center;">
+                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- COLONNE SECONDAIRE : LIQUIDATION DES DETTES RAPIDES -->
+                <!-- COLONNE LATÉRALE : RÈGLEMENTS PRIORITAIRES -->
                 <aside class="col-side">
                     <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem;">
-                        <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+                        <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
                             <span>Règlements en attente</span>
-                            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">2 virements</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">2 virements</span>
                         </h3>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <!-- Virement 1 -->
-                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--border);">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
-                                    <strong>Gautam</strong>
-                                    <svg class="icon" style="color: var(--brand);"><use href="#icon-arrow-right"/></svg>
-                                    <strong>Vous</strong>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <span class="num" style="font-weight: 700; font-size: 0.92rem; color: var(--positive);">24,92 €</span>
-                                    <button class="btn btn-secondary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Reçu</button>
-                                </div>
-                            </div>
 
-                            <!-- Virement 2 -->
-                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;">
-                                    <strong>Vous</strong>
-                                    <svg class="icon" style="color: var(--negative);"><use href="#icon-arrow-right"/></svg>
-                                    <strong>Abdelkader</strong>
+                        <!-- Virement 1 -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.86rem;">
+                                <strong>Gautam</strong>
+                                <div style="display: flex; align-items: center; color: var(--brand);">
+                                    <svg class="icon-sm"><use href="#icon-arrow-right"/></svg>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <span class="num" style="font-weight: 700; font-size: 0.92rem; color: var(--negative);">15,50 €</span>
-                                    <button class="btn btn-primary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Régler</button>
+                                <strong>Vous</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="num" style="font-weight: 800; color: var(--positive); font-size: 0.95rem;">24,92 €</span>
+                                <button class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+                                    <svg class="icon-sm" style="color: var(--brand);"><use href="#icon-check"/></svg>
+                                    Reçu
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Virement 2 -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.86rem;">
+                                <strong>Vous</strong>
+                                <div style="display: flex; align-items: center; color: var(--negative);">
+                                    <svg class="icon-sm"><use href="#icon-arrow-right"/></svg>
                                 </div>
+                                <strong>Abdelkader</strong>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="num" style="font-weight: 800; color: var(--negative); font-size: 0.95rem;">15,50 €</span>
+                                <button class="btn btn-primary btn-sm" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+                                    Régler
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -951,87 +1022,79 @@
         </main>
 
         <!-- ============================================== -->
-        <!-- VUE 2 : DÉTAIL POT (CHRONO EXPENSES & DÉTAIL)  -->
+        <!-- VUE 2 : DÉTAIL D'UNE CAGNOTTE                  -->
         <!-- ============================================== -->
         <main id="view-detail" style="display: none;">
             
-            <!-- Breadcrumb & Back -->
-            <div style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
-                <button class="btn btn-ghost btn-sm" onclick="navigateScreen('dash')">
+            <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-secondary btn-sm" onclick="navigateScreen('dash')">
                     ← Retour à la liste
                 </button>
                 <div style="display: flex; gap: 0.5rem;">
                     <button class="btn btn-secondary btn-sm">
-                        <svg class="icon"><use href="#icon-download"/></svg>
+                        <svg class="icon-sm"><use href="#icon-download"/></svg>
                         Export CSV
                     </button>
                     <button class="btn btn-secondary btn-sm">
-                        <svg class="icon"><use href="#icon-users"/></svg>
+                        <svg class="icon-sm"><use href="#icon-users"/></svg>
                         Inviter
                     </button>
                     <button class="btn btn-secondary btn-sm" style="color: var(--negative);">
-                        <svg class="icon"><use href="#icon-lock"/></svg>
+                        <svg class="icon-sm"><use href="#icon-lock"/></svg>
                         Clôturer
                     </button>
                 </div>
             </div>
 
-            <!-- En-tête de la cagnotte -->
+            <!-- Hero En-tête Cagnotte -->
             <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
-                <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 0.65rem;">
-                            <h1 style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">Vacances Barcelone 2026</h1>
+                            <h1 style="font-size: 1.5rem; font-weight: 800;">Vacances Barcelone 2026</h1>
                             <span style="font-size: 0.72rem; font-weight: 700; background: var(--brand-subtle); color: var(--brand-text); padding: 0.2rem 0.55rem; border-radius: var(--radius-pill); border: 1px solid var(--brand-border);">OUVERT</span>
                         </div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
-                            Devise : <strong>EUR (€)</strong> • 5 membres • Créé le 12 mai 2026
-                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">EUR (€) • 5 membres • Créé le 12 mai 2026</p>
                     </div>
-
                     <div style="display: flex; align-items: center; gap: 1.5rem;">
                         <div style="text-align: right;">
                             <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total engagé</div>
                             <div class="num" style="font-size: 1.45rem; font-weight: 800;">642,80 €</div>
                         </div>
-                        <button class="btn btn-primary" onclick="alert('Formulaire modal de nouvelle dépense')">
+                        <button class="btn btn-primary" onclick="alert('Ajout de dépense')">
                             <svg class="icon"><use href="#icon-plus"/></svg>
-                            Ajouter une dépense
+                            Nouvelle dépense
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Onglets de Segmentation (Divulgation Progressive) -->
+            <!-- Onglets de Navigation par Segment -->
             <div class="segment-tabs">
                 <button class="segment-btn active" onclick="switchDetailTab(this, 'tab-stream')">
-                    <svg class="icon"><use href="#icon-receipt"/></svg>
+                    <svg class="icon-sm"><use href="#icon-receipt"/></svg>
                     Dépenses (3)
                 </button>
                 <button class="segment-btn" onclick="switchDetailTab(this, 'tab-settlement')">
-                    <svg class="icon"><use href="#icon-wallet"/></svg>
-                    Soldes & Remboursements (2)
-                </button>
-                <button class="segment-btn" onclick="switchDetailTab(this, 'tab-part')">
-                    <svg class="icon"><use href="#icon-users"/></svg>
-                    Membres (5)
+                    <svg class="icon-sm"><use href="#icon-wallet"/></svg>
+                    Soldes & Dettes (2)
                 </button>
             </div>
 
-            <!-- ONGLET 1 : TIMELINE CHRONOLOGIQUE -->
+            <!-- ONGLET 1 : DÉPENSES -->
             <div id="tab-stream">
                 <div class="timeline-stream">
                     <div class="stream-day-separator">Aujourd'hui</div>
 
-                    <!-- Dépense 1 -->
+                    <!-- Ligne Dépense 1 -->
                     <div class="expense-card">
                         <div class="expense-left">
-                            <div class="expense-cat-icon">
+                            <div class="icon-badge icon-badge-amber" style="width: 40px; height: 40px;">
                                 <svg class="icon"><use href="#icon-shopping-bag"/></svg>
                             </div>
                             <div>
                                 <div class="expense-label">Courses Mercadona</div>
-                                <div class="expense-detail">Payé par <strong>Khalil</strong> • 5 bénéficiaires</div>
+                                <div class="expense-detail">Payé par <strong>Khalil</strong> • 5 parts</div>
                             </div>
                         </div>
                         <div class="expense-right">
@@ -1040,15 +1103,15 @@
                         </div>
                     </div>
 
-                    <!-- Dépense 2 -->
+                    <!-- Ligne Dépense 2 -->
                     <div class="expense-card">
                         <div class="expense-left">
-                            <div class="expense-cat-icon">
+                            <div class="icon-badge icon-badge-blue" style="width: 40px; height: 40px;">
                                 <svg class="icon"><use href="#icon-coffee"/></svg>
                             </div>
                             <div>
                                 <div class="expense-label">Tapas & Boissons El Born</div>
-                                <div class="expense-detail">Payé par <strong>Abdelkader</strong> • 5 bénéficiaires</div>
+                                <div class="expense-detail">Payé par <strong>Abdelkader</strong> • 5 parts</div>
                             </div>
                         </div>
                         <div class="expense-right">
@@ -1059,15 +1122,15 @@
 
                     <div class="stream-day-separator">Hier</div>
 
-                    <!-- Dépense 3 -->
+                    <!-- Ligne Dépense 3 -->
                     <div class="expense-card">
                         <div class="expense-left">
-                            <div class="expense-cat-icon">
+                            <div class="icon-badge icon-badge-indigo" style="width: 40px; height: 40px;">
                                 <svg class="icon"><use href="#icon-ticket"/></svg>
                             </div>
                             <div>
                                 <div class="expense-label">Billets Sagrada Família</div>
-                                <div class="expense-detail">Payé par <strong>Gautam</strong> • 5 bénéficiaires</div>
+                                <div class="expense-detail">Payé par <strong>Gautam</strong> • 5 parts</div>
                             </div>
                         </div>
                         <div class="expense-right">
@@ -1078,84 +1141,62 @@
                 </div>
             </div>
 
-            <!-- ONGLET 2 : CALCUL DES SOLDES & REMBOURSEMENT SIMPLIFIÉ -->
+            <!-- ONGLET 2 : SOLDES ET REGLEMENTS -->
             <div id="tab-settlement" style="display: none;">
                 <div style="display: flex; flex-direction: column; gap: 0.85rem;">
                     
                     <div class="settlement-card">
                         <div class="settlement-actors">
                             <div class="actor-tag">
-                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">G</span>
+                                <span style="width: 26px; height: 26px; border-radius: 50%; background: #7c3aed; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;">G</span>
                                 Gautam
                             </div>
                             <div class="arrow-badge">
-                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
+                                <svg class="icon-sm"><use href="#icon-arrow-right"/></svg>
                             </div>
                             <div class="actor-tag">
-                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">K</span>
+                                <span style="width: 26px; height: 26px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;">K</span>
                                 Khalil
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <span class="num" style="font-weight: 800; font-size: 1.15rem; color: var(--text-main);">24,92 €</span>
-                            <button class="btn btn-secondary btn-sm">Marquer remboursé</button>
+                            <button class="btn btn-secondary btn-sm">
+                                <svg class="icon-sm" style="color: var(--brand);"><use href="#icon-check"/></svg>
+                                Marquer remboursé
+                            </button>
                         </div>
                     </div>
 
                     <div class="settlement-card">
                         <div class="settlement-actors">
                             <div class="actor-tag">
-                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #059669; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">T</span>
+                                <span style="width: 26px; height: 26px; border-radius: 50%; background: #059669; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;">T</span>
                                 Thomas
                             </div>
                             <div class="arrow-badge">
-                                <svg class="icon"><use href="#icon-arrow-right"/></svg>
+                                <svg class="icon-sm"><use href="#icon-arrow-right"/></svg>
                             </div>
                             <div class="actor-tag">
-                                <span style="width: 22px; height: 22px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.68rem;">A</span>
+                                <span style="width: 26px; height: 26px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem;">A</span>
                                 Abdelkader
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <span class="num" style="font-weight: 800; font-size: 1.15rem; color: var(--text-main);">18,50 €</span>
-                            <button class="btn btn-secondary btn-sm">Marquer remboursé</button>
+                            <button class="btn btn-secondary btn-sm">
+                                <svg class="icon-sm" style="color: var(--brand);"><use href="#icon-check"/></svg>
+                                Marquer remboursé
+                            </button>
                         </div>
                     </div>
 
                 </div>
             </div>
-
-            <!-- ONGLET 3 : MEMBRES -->
-            <div id="tab-part" style="display: none;">
-                <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
-                    <div style="padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border);">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 28px; height: 28px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">K</span>
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.92rem;">Khalil Bouchama</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted);">Créateur & Administrateur</div>
-                            </div>
-                        </div>
-                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Admin</span>
-                    </div>
-
-                    <div style="padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <span style="width: 28px; height: 28px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.78rem;">A</span>
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.92rem;">Abdelkader Heddi</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted);">Membre</div>
-                            </div>
-                        </div>
-                        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Membre</span>
-                    </div>
-                </div>
-            </div>
-
         </main>
 
         <!-- ============================================== -->
-        <!-- VUE 3 : ÉTAT VIDE (EMPTY STATE SOBRE)          -->
+        <!-- VUE 3 : ÉTAT VIDE SOBRE                        -->
         <!-- ============================================== -->
         <main id="view-empty" style="display: none;">
             <div class="empty-boundary">
@@ -1164,20 +1205,17 @@
                 </div>
                 <h3 style="font-size: 1.15rem; font-weight: 700;">Aucune dépense enregistrée</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 380px;">
-                    Partagez les premiers frais de ce pot en renseignant le montant et les participants concernés.
+                    Partagez les premiers frais de ce pot en renseignant le montant et les participants.
                 </p>
-                <div style="margin-top: 0.5rem;">
-                    <button class="btn btn-primary" onclick="navigateScreen('detail')">
-                        <svg class="icon"><use href="#icon-plus"/></svg>
-                        Ajouter la première dépense
-                    </button>
-                </div>
+                <button class="btn btn-primary" onclick="navigateScreen('detail')">
+                    <svg class="icon"><use href="#icon-plus"/></svg>
+                    Ajouter la première dépense
+                </button>
             </div>
         </main>
 
     </div>
 
-    <!-- JAVASCRIPT DE NAVIGATION DANS LA MAQUETTE -->
     <script>
         function navigateScreen(screen) {
             document.getElementById('view-dash').style.display = 'none';
@@ -1200,7 +1238,6 @@
 
             document.getElementById('tab-stream').style.display = 'none';
             document.getElementById('tab-settlement').style.display = 'none';
-            document.getElementById('tab-part').style.display = 'none';
 
             document.getElementById(tabId).style.display = 'block';
         }
