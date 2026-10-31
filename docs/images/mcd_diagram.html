@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Modèle Conceptuel de Données — Les Bons Comptes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    width: 2500px;
+    height: 1450px;
+    background-color: #ffffff;
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    color: #111827;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Academic Header (LaTeX Article / Report Style) */
+  .title-container {
+    position: absolute;
+    top: 35px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #0f172a;
+    z-index: 20;
+  }
+  .title-main h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: #0f172a;
+    font-family: 'EB Garamond', serif;
+  }
+  .title-main p {
+    font-size: 16px;
+    font-style: italic;
+    color: #475569;
+    margin-top: 4px;
+    font-family: 'EB Garamond', serif;
+  }
+  .title-meta {
+    display: flex;
+    gap: 12px;
+  }
+  .meta-tag {
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    border-radius: 3px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: #334155;
+  }
+
+  /* Table Cards - LaTeX / TikZ Box Style with Explicit Heights */
+  .entity-card {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1.5px solid #0f172a;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+  }
+
+  .entity-header {
+    height: 68px;
+    padding: 10px 18px;
+    background: #f8fafc;
+    border-bottom: 1.5px solid #0f172a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .entity-name {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+    font-family: 'EB Garamond', serif;
+    line-height: 24px;
+  }
+  .entity-app {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #64748b;
+    margin-top: 2px;
+    line-height: 16px;
+  }
+
+  .entity-body {
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field-row {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .field-row:last-child {
+    border-bottom: none;
+  }
+  .field-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .field-name {
+    font-weight: 600;
+    color: #0f172a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+  }
+  .field-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: #475569;
+  }
+
+  /* Academic Badges (Clean LaTeX Box Style) */
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+  .badge-pk {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #b45309;
+  }
+  .badge-fk {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #0284c7;
+  }
+  .badge-uq {
+    background: #f3e8ff;
+    color: #6b21a8;
+    border: 1px solid #9333ea;
+  }
+
+  /* SVG Connections - Z-index 15 so arrows sit directly on borders */
+  svg.connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2500px;
+    height: 1450px;
+    z-index: 15;
+    pointer-events: none;
+  }
+
+  .link-path {
+    fill: none;
+    stroke: #0f172a;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .link-path-dashed {
+    fill: none;
+    stroke: #475569;
+    stroke-width: 1.8;
+    stroke-dasharray: 6,4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .link-pill {
+    fill: #ffffff;
+    stroke: #0f172a;
+    stroke-width: 1.3;
+    rx: 3;
+    ry: 3;
+  }
+  .link-text {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+    fill: #0f172a;
+  }
+
+  .cardinality-text {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    font-style: italic;
+    fill: #0f172a;
+  }
+
+  /* Academic Footer / Figure Caption */
+  .legend-container {
+    position: absolute;
+    bottom: 25px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid #cbd5e1;
+    z-index: 20;
+  }
+  .caption-text {
+    font-size: 15px;
+    font-style: italic;
+    color: #334155;
+  }
+  .caption-bold {
+    font-weight: 700;
+    font-style: normal;
+    color: #0f172a;
+  }
+  .legend-items {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<!-- Academic Header -->
+<div class="title-container">
+  <div class="title-main">
+    <h1>Modèle Conceptuel de Données (MCD) — Application « Les Bons Comptes »</h1>
+    <p>Schéma relationnel sous Django 5.1 & PostgreSQL (3NF) • Module Infrastructures & Frameworks (Master 2 MIAGE / IFI)</p>
+  </div>
+  <div class="title-meta">
+    <div class="meta-tag">apps.accounts</div>
+    <div class="meta-tag">apps.wallets</div>
+    <div class="meta-tag">apps.expenses</div>
+  </div>
+</div>
+
+<!-- ==========================================
+     CARDS DEFINITIONS (Fixed Predictable Dimensions)
+     ========================================== -->
+
+<!-- 1. WALLET (Top Left): 7 fields => Height = 68 + 12 + 7*36 + 3 = 335px. Top: 220px, Bottom: 555px. CenterX: 370px -->
+<div id="card-wallet" class="entity-card" style="top: 220px; left: 130px; width: 480px; height: 335px;">
+  <div class="entity-header">
+    <div class="entity-name">Wallet</div>
+    <div class="entity-app">apps.wallets • Porte-Monnaie Collectif</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">uuid (v4)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">creator_id</span></div>
+      <span class="field-type">int &rarr; User</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">title</span></div>
+      <span class="field-type">varchar(150)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">description</span></div>
+      <span class="field-type">text (blank)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">currency</span></div>
+      <span class="field-type">varchar(3) [EUR]</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">status</span></div>
+      <span class="field-type">OUVERT | CLOS</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">created_at</span></div>
+      <span class="field-type">datetime</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. EXPENSE (Bottom Left): 7 fields => Height = 335px. Top: 780px, Bottom: 1115px. CenterX: 370px -->
+<div id="card-expense" class="entity-card" style="top: 780px; left: 130px; width: 480px; height: 335px;">
+  <div class="entity-header">
+    <div class="entity-name">Expense</div>
+    <div class="entity-app">apps.expenses • Dépense Collective</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">uuid (v4)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">wallet_id</span></div>
+      <span class="field-type">uuid &rarr; Wallet</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">payer_id</span></div>
+      <span class="field-type">int &rarr; User</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">title</span></div>
+      <span class="field-type">varchar(150)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">amount</span></div>
+      <span class="field-type">decimal(10, 2)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">expense_date</span></div>
+      <span class="field-type">date</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">created_at</span></div>
+      <span class="field-type">datetime</span>
+    </div>
+  </div>
+</div>
+
+<!-- 3. WALLET_MEMBERSHIP (Top Center): 6 fields => Height = 68 + 12 + 6*36 + 3 = 299px. Top: 220px, Bottom: 519px. CenterX: 1200px, CenterY: 370px -->
+<div id="card-membership" class="entity-card" style="top: 220px; left: 960px; width: 480px; height: 299px;">
+  <div class="entity-header">
+    <div class="entity-name">WalletMembership</div>
+    <div class="entity-app">apps.wallets • Adhésion & Rôle</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">BigAuto / int</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">wallet_id</span></div>
+      <span class="field-type">uuid &rarr; Wallet</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">user_id</span></div>
+      <span class="field-type">int &rarr; User</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">role</span></div>
+      <span class="field-type">ADMIN | MEMBRE</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">status</span></div>
+      <span class="field-type">INVITE | ACCEPTE | REFUSE</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">joined_at</span></div>
+      <span class="field-type">datetime (null)</span>
+    </div>
+  </div>
+</div>
+
+<!-- 4. REIMBURSEMENT (Middle Center): 6 fields => Height = 299px. Top: 580px, Bottom: 879px. CenterX: 1200px, CenterY: 730px -->
+<div id="card-reimbursement" class="entity-card" style="top: 580px; left: 960px; width: 480px; height: 299px;">
+  <div class="entity-header">
+    <div class="entity-name">Reimbursement</div>
+    <div class="entity-app">apps.expenses • Remboursement Direct (Mock)</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">BigAuto / int</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">wallet_id</span></div>
+      <span class="field-type">uuid &rarr; Wallet</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">sender_id</span></div>
+      <span class="field-type">int &rarr; User (Débiteur)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">receiver_id</span></div>
+      <span class="field-type">int &rarr; User (Créditeur)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">amount</span></div>
+      <span class="field-type">decimal(10, 2)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">created_at</span></div>
+      <span class="field-type">datetime</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5. EXPENSE_SHARE (Bottom Center): 4 fields => Height = 68 + 12 + 4*36 + 3 = 227px. Top: 940px, Bottom: 1167px. CenterX: 1200px, CenterY: 1054px -->
+<div id="card-share" class="entity-card" style="top: 940px; left: 960px; width: 480px; height: 227px;">
+  <div class="entity-header">
+    <div class="entity-name">ExpenseShare</div>
+    <div class="entity-app">apps.expenses • Quote-Part Individuelle</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">BigAuto / int</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">expense_id</span></div>
+      <span class="field-type">uuid &rarr; Expense</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-fk">FK</span><span class="field-name">user_id</span></div>
+      <span class="field-type">int &rarr; User</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">share_amount</span></div>
+      <span class="field-type">decimal(10, 2)</span>
+    </div>
+  </div>
+</div>
+
+<!-- 6. USER (Right Center): 5 fields => Height = 68 + 12 + 5*36 + 3 = 263px. Top: 490px, Bottom: 753px. CenterX: 2020px, CenterY: 621px -->
+<div id="card-user" class="entity-card" style="top: 490px; left: 1790px; width: 460px; height: 263px;">
+  <div class="entity-header">
+    <div class="entity-name">User (CustomUser)</div>
+    <div class="entity-app">apps.accounts • Utilisateur Système</div>
+  </div>
+  <div class="entity-body">
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-pk">PK</span><span class="field-name">id</span></div>
+      <span class="field-type">BigAuto / int</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-uq">UQ</span><span class="field-name">username</span></div>
+      <span class="field-type">varchar(150)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="badge badge-uq">UQ</span><span class="field-name">email</span></div>
+      <span class="field-type">varchar(254)</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">password</span></div>
+      <span class="field-type">varchar(128) [PBKDF2]</span>
+    </div>
+    <div class="field-row">
+      <div class="field-left"><span class="field-name">date_joined</span></div>
+      <span class="field-type">datetime</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================
+     SVG CONNECTIONS LAYER (TikZ Cut Style - Zero Overlap, Mathematically Exact Anchors)
+     ========================================== -->
+<svg class="connections" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Sharp TikZ-style Arrowhead -->
+    <marker id="tikz-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0f172a" />
+    </marker>
+  </defs>
+
+  <!-- 1. WALLET <-> WALLET_MEMBERSHIP (Horizontal line at Y=370, split at badge) -->
+  <path d="M 610 370 L 735 370 M 835 370 L 960 370" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="735" y="354" width="100" height="32" class="link-pill" />
+  <text x="785" y="370" class="link-text">contient</text>
+  <text x="625" y="358" class="cardinality-text">1..1</text>
+  <text x="925" y="358" class="cardinality-text">0..*</text>
+
+  <!-- 2. WALLET_MEMBERSHIP <-> USER (Smooth curve from Membership right to User upper-left at Y=545) -->
+  <path d="M 1440 370 C 1600 370, 1630 545, 1790 545" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="1565" y="420" width="110" height="32" class="link-pill" />
+  <text x="1620" y="436" class="link-text">participe à</text>
+  <text x="1455" y="360" class="cardinality-text">0..*</text>
+  <text x="1750" y="535" class="cardinality-text">1..1</text>
+
+  <!-- 3. WALLET <-> EXPENSE (Vertical straight line at X=370, split at badge) -->
+  <!-- Wallet bottom is 555, Expense top is 780. Mid = 667.5 => Badge: 652 to 684 -->
+  <path d="M 370 555 L 370 652 M 370 684 L 370 780" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="315" y="652" width="110" height="32" class="link-pill" />
+  <text x="370" y="668" class="link-text">enregistre</text>
+  <text x="388" y="580" class="cardinality-text">1..1</text>
+  <text x="388" y="760" class="cardinality-text">0..*</text>
+
+  <!-- 4. WALLET <-> REIMBURSEMENT (Smooth curve from Wallet right to Reimbursement left at Y=730) -->
+  <path d="M 610 490 C 780 490, 790 730, 960 730" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="730" y="594" width="110" height="32" class="link-pill" />
+  <text x="785" y="610" class="link-text">enregistre</text>
+  <text x="625" y="480" class="cardinality-text">1..1</text>
+  <text x="925" y="720" class="cardinality-text">0..*</text>
+
+  <!-- 5. REIMBURSEMENT <-> USER (Horizontal line at Y=625 from Reimbursement right to User left) -->
+  <!-- Reimbursement is 580-879, User is 490-753. Y=625 connects both cleanly! -->
+  <path d="M 1440 625 L 1475 625 M 1755 625 L 1790 625" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="1475" y="609" width="280" height="32" class="link-pill" />
+  <text x="1615" y="625" class="link-text">émet (débiteur) / reçoit (créancier)</text>
+  <text x="1450" y="615" class="cardinality-text">0..*</text>
+  <text x="1755" y="615" class="cardinality-text">1..1</text>
+
+  <!-- 6. EXPENSE <-> EXPENSE_SHARE (Horizontal line at Y=1054, split at badge) -->
+  <path d="M 610 1054 L 725 1054 M 845 1054 L 960 1054" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="725" y="1038" width="120" height="32" class="link-pill" />
+  <text x="785" y="1054" class="link-text">est ventilée en</text>
+  <text x="625" y="1042" class="cardinality-text">1..1</text>
+  <text x="925" y="1042" class="cardinality-text">1..*</text>
+
+  <!-- 7. EXPENSE_SHARE <-> USER (Smooth curve from ExpenseShare right to User lower-left at Y=705) -->
+  <path d="M 1440 1054 C 1600 1054, 1630 705, 1790 705" class="link-path" marker-end="url(#tikz-arrow)" />
+  <rect x="1560" y="860" width="120" height="32" class="link-pill" />
+  <text x="1620" y="876" class="link-text">bénéficie de</text>
+  <text x="1455" y="1044" class="cardinality-text">0..*</text>
+  <text x="1750" y="695" class="cardinality-text">1..1</text>
+
+  <!-- 8. USER <-> WALLET (Creator FK - Top Highway, split at badge) -->
+  <!-- User top is 490 (X=2020), goes up to Y=130, across to X=370, down to Wallet top at Y=220 -->
+  <path d="M 2020 490 L 2020 130 L 1260 130 M 1140 130 L 370 130 L 370 220" class="link-path-dashed" marker-end="url(#tikz-arrow)" />
+  <rect x="1140" y="114" width="120" height="32" class="link-pill" />
+  <text x="1200" y="130" class="link-text">a créé (admin)</text>
+  <text x="2035" y="475" class="cardinality-text">1..1</text>
+  <text x="385" y="205" class="cardinality-text">0..*</text>
+
+  <!-- 9. USER <-> EXPENSE (Payer FK - Bottom Highway, split at badge) -->
+  <!-- User bottom is 753 (X=2020), goes down to Y=1260, across to X=370, up to Expense bottom at Y=1115 -->
+  <path d="M 2020 753 L 2020 1260 L 1260 1260 M 1140 1260 L 370 1260 L 370 1115" class="link-path-dashed" marker-end="url(#tikz-arrow)" />
+  <rect x="1140" y="1244" width="120" height="32" class="link-pill" />
+  <text x="1200" y="1260" class="link-text">a payé (frais)</text>
+  <text x="2035" y="775" class="cardinality-text">1..1</text>
+  <text x="385" y="1135" class="cardinality-text">0..*</text>
+</svg>
+
+<!-- Academic Figure Caption & Legend -->
+<div class="legend-container">
+  <div class="caption-text">
+    <span class="caption-bold">Figure 1</span> — Diagramme Entité-Relation normalisé (3NF) de l'application « Les Bons Comptes ».
+  </div>
+  <div class="legend-items">
+    <div class="legend-item"><span class="badge badge-pk">PK</span> Clé Primaire</div>
+    <div class="legend-item"><span class="badge badge-fk">FK</span> Clé Étrangère</div>
+    <div class="legend-item"><span class="badge badge-uq">UQ</span> Contrainte d'Unicité</div>
+    <div class="legend-item" style="font-family:'EB Garamond', serif; font-style:italic; font-size:15px; font-weight:700;">1..1 &rarr; 0..* Cardinalités Merise</div>
+  </div>
+</div>
+
+</body>
+</html>
