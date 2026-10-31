@@ -430,3 +430,58 @@ Les formulaires de saisie financière doivent inspirer confiance et être simple
 | **Sécurité des formulaires** | Présence des jetons `{% csrf_token %}` et dialogues de confirmation | **100 % conforme** |
 | **Intégrité de l'algorithme glouton** | Plan de remboursement et annulation de règlements intacts | **100 % préservé** |
 | **Code métier de Gautam & Abdelkader** | Zéro modification dans `models.py` et `services.py` | **100 % intouché** |
+
+
+---
+
+## 📘 Étape 7 / Commit 7 : Interfaces d'Authentification et Profil Utilisateur
+
+### 1. Intitulé Proposé pour le Commit (GitLab)
+```text
+style(auth): moderniser les interfaces d'authentification et de profil utilisateur
+
+- Ajout du modificateur .avatar-xl (64px) pour la mise en valeur des fiches utilisateurs
+- Refonte de login.html avec conteneur centre, pastille d'icone vectorielle et focus rings accessibles
+- Harmonisation de register.html avec gestion propre des textes d'aide et affichage net des erreurs
+- Modernisation de profile.html avec avatar grand format, resume d'identite et deconnexion POST securisee
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 7
+
+#### A. Les Écrans d'Authentification : Première Impression et Confiance
+Les écrans d'authentification (`login.html`, `register.html`) sont les passerelles d'entrée de l'application. Une interface brute, avec des champs trop larges et des contrastes mal dosés, suscite immédiatement la méfiance des utilisateurs quant à la sécurité de leurs identifiants.
+- **Conteneur centré calibré (`.form-container`)** : Limité à 480px–520px de largeur avec marges automatiques pour centrer visuellement le regard.
+- **Pastilles vectorielles SVG** : Présence des symboles unifiés `#icon-user` (connexion) et `#icon-users` (inscription) logés dans des badges émeraude apaisants.
+- **Micro-interactions et accessibilité** : Bordures de champ au ratio de contraste garanti, avec halo de focus émeraude (`focus-visible`) lors de la navigation au clavier.
+
+#### B. Évolution Modulaire du Composant Avatar (`.avatar-xl`)
+Pour la page de profil (`profile.html`), l'avatar utilisateur méritait une mise en scène valorisante :
+- Ajout de la classe `.avatar-xl` (diamètre 64px, police 1.5rem) dans `style.css`.
+- Support immédiat et rétrocompatible dans `components/avatar.html` (`{% include "components/avatar.html" with user=user size="xl" %}`).
+- Respect scrupuleux du principe **Open/Closed (SOLID)** : le composant a été étendu sans altérer son fonctionnement existant sur les autres pages (tailles `sm`, `md`, `lg`).
+
+#### C. Sécurité Formelle : Déconnexion en Méthode HTTP POST (Django 5)
+Depuis Django 5, la déconnexion par simple lien `GET` est formellement proscrite pour éviter les attaques CSRF et les déconnexions involontaires causées par le préchargement des liens des navigateurs modernes :
+```django
+<form method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">
+        <svg class="icon-sm"><use href="#icon-lock"></use></svg>
+        <span>Se déconnecter</span>
+    </button>
+</form>
+```
+L'interface de `profile.html` encapsule parfaitement ce bouton avec son jeton de protection `{% csrf_token %}` et l'icône de verrouillage vectorielle `#icon-lock`.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Sécurité CSRF & Auth** | Flux de login, register et logout conformes Django 5 | **100 % conforme** |
+| **Composant avatar étendu** | Tailles `sm`, `md`, `lg`, `xl` fonctionnelles sans régression | **100 % valide** |
+| **Code métier de Gautam & Abdelkader** | Zéro ligne modifiée dans `models.py` / `services.py` | **100 % intouché** |
