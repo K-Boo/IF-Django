@@ -244,3 +244,24 @@
     - Commit 6 : Vue des soldes (`balances.html`) et formulaires financiers (`expense_form.html`, `wallet_form.html`, `wallet_invite.html`).
     - Commit 7 : Écrans d'authentification (`login.html`, `register.html`, `profile.html`).
     - Commit 8 : Audit visuel final réactif et revue d'intégrité globale.
+
+
+---
+
+### Étape 12 : Finalisation Complète du Volet 4 (Commits 6 et 7, Audit Qualité & Clôture)
+- **Objectif & Cadrage** :
+  - Achever la refonte ergonomique et visuelle des derniers écrans de l'application (soldes, dettes, formulaires et authentification).
+  - Effectuer les contrôles qualité finaux pour garantir zéro régression fonctionnelle et intégrité totale du travail d'équipe.
+- **Réalisations Clés Déployées sur GitLab (`if-django-2026`)** :
+  1. **Commit 6 (`a8f38d8`) — Matrice des Soldes & Formulaires Financiers** :
+     - Refonte de `balances.html` : éradication des émojis (`💸`, `📥`, `✅`), chiffres tabulaires (`tabular-nums`), badges sémantiques (créancier vert émeraude, débiteur ambré, équilibre neutre).
+     - Cartes de transfert directionnel (`.settlement-card`) matérialisant le plan glouton avec bouton d'apurement direct.
+     - Ergonomie des formulaires `expense_form.html`, `wallet_form.html`, et `wallet_invite.html` avec pastilles iconographiques et conteneur centré.
+  2. **Commit 7 (`6c878b0`) — Interfaces d'Authentification & Profil Utilisateur** :
+     - Modernisation de `login.html` et `register.html` avec conteneur `.form-container` et focus rings accessibles.
+     - Modernisation de `profile.html` avec pastille avatar grand format `.avatar-xl` (64px) et formulaire de déconnexion sécurisé en méthode POST (Django 5).
+- **Indicateurs & Bilan Global Volet 4** :
+  - **Tests unitaires Django** : **26/26 tests réussis (100% de succès)**.
+  - **Code métier** : 0 modification dans les modèles et services de Gautam et Abdelkader (100% préservé).
+  - **GitLab Univ-Lille** : 7 commits conventionnels en français poussés avec succès sur la branche `main`.
+  - **GitHub Assistance** : Documentation pédagogique exhaustive [`docs/VOLET_4_GUIDE_UI_UX.md`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/IF-Django/docs/VOLET_4_GUIDE_UI_UX.md) à jour.

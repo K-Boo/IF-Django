@@ -485,3 +485,51 @@ L'interface de `profile.html` encapsule parfaitement ce bouton avec son jeton de
 | **Sécurité CSRF & Auth** | Flux de login, register et logout conformes Django 5 | **100 % conforme** |
 | **Composant avatar étendu** | Tailles `sm`, `md`, `lg`, `xl` fonctionnelles sans régression | **100 % valide** |
 | **Code métier de Gautam & Abdelkader** | Zéro ligne modifiée dans `models.py` / `services.py` | **100 % intouché** |
+
+
+---
+
+## 📘 Étape 8 / Commit 8 : Bilan Global, Audit Qualité & Clôture Définitive du Volet 4
+
+### 1. Synthèse de la Refonte UI/UX « Les Bons Comptes »
+Le **Volet 4** a permis de hisser l'application web au rang d'un produit moderne, sobre, ergonomique et accessible, en rupture totale avec les poncifs visuels génériques (« AI Slop ») :
+
+1. **Architecture Sémantique & Tokens OKLCH** :
+   - Abandon des couleurs criardes au profit d'une palette Émeraude Trésorerie apaisante et de contrastes validés WCAG AA.
+   - Alignement comptable vertical strict grâce aux chiffres tabulaires (`.num`, `font-variant-numeric: tabular-nums`).
+2. **Système Vectoriel SVG Unifié (Zero Emoji)** :
+   - Éradication intégrale des émojis au profit d'un catalogue unifié `<symbol viewBox="0 0 24 24">` héritant naturellement de `currentColor`.
+3. **Composants Partiels Modulaires (SOLID Django MVT)** :
+   - Implantation de composants réutilisables (`avatar.html`, `empty_state.html`, `icons.html`) injectables par simple balise `{% include %}` sans dépendance tierce.
+4. **Agencement Asymétrique Flexbox & Divulgation Progressive** :
+   - Tableau de bord en deux colonnes hiérarchisées (cagnottes vs règlements rapides).
+   - Fiche détaillée découpée en onglets fluides en JavaScript pur (*Dépenses*, *Participants*, *Invitations*).
+5. **Ergonomie Financière & Visualisation Graphique des Dettes** :
+   - Cartes directionnelles de flux (*Débiteur ➔ Créancier*) avec bouton d'apurement en 1 clic.
+   - Formulaires calibrés avec focus rings accessibles et sélection tactile aérée.
+
+---
+
+### 2. Matrice de Validation Qualité & Non-Régression
+
+| Domaine de Contrôle | Exigence | Résultat | Statut |
+| :--- | :--- | :--- | :---: |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **26/26 réussis (100 % de succès)** | ✅ CONFORME |
+| **Sanctuaire Code Métier** | Zéro modification `models.py` / `services.py` | **0 ligne métier modifiée** | ✅ CONFORME |
+| **Sécurité des Formulaires** | Protection CSRF sur toutes les actions POST | **100 % des formulaires sécurisés** | ✅ CONFORME |
+| **Accessibilité & Contraste** | Ratios de contraste et navigation clavier | **Conforme WCAG AA** | ✅ CONFORME |
+| **Historique Git GitLab** | Messages modulaires et conventionnels en français | **7 commits thématiques propres** | ✅ CONFORME |
+
+---
+
+### 3. Chronologie des 7 Commits Poussés sur GitLab Univ-Lille (`if-django-2026`)
+
+```text
+* 6c878b0 style(auth): moderniser les interfaces d'authentification et de profil utilisateur
+* a8f38d8 feat(expenses): moderniser la matrice des soldes, les flux de dettes et les formulaires financiers
+* 4637127 feat(wallets): refonte de la fiche detaillee avec onglets contextuels et flux de depenses
+* 3fe220b feat(wallets): refonte asymetrique flexbox du tableau de bord et invitations compactes
+* ff8de26 refactor(layout): modernisation du conteneur base, de la navbar et des messages flash
+* 5c8b35a feat(ui): ajout du sprite svg vectoriel et des composants partiels réutilisables
+* c1391db style(theme): refonte de l'architecture css avec tokens oklch, chiffres tabulaires et base flexbox
+```
