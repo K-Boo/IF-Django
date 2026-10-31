@@ -265,3 +265,60 @@
   - **Code métier** : 0 modification dans les modèles et services de Gautam et Abdelkader (100% préservé).
   - **GitLab Univ-Lille** : 7 commits conventionnels en français poussés avec succès sur la branche `main`.
   - **GitHub Assistance** : Documentation pédagogique exhaustive [`docs/VOLET_4_GUIDE_UI_UX.md`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/IF-Django/docs/VOLET_4_GUIDE_UI_UX.md) à jour.
+
+
+---
+
+### Étape 13 : Recette E2E Navigateur Chrome, Durcissement OWASP & Persistance de la Règle 07 (/learn)
+- **Objectif & Cadrage** :
+  - Exécuter une recette End-to-End (E2E) en direct sur Chrome DevTools pour valider la fluidité utilisateur, la navigation MVT et l'apurement des dettes.
+  - Auditer et durcir la sécurité globale de l'application selon les préconisations du *Django Security Cheat Sheet* de l'OWASP.
+- **Réalisations Techniques & Sécurité** :
+  1. **Recette E2E en Sandbox Éphémère (Zero Data Pollution)** :
+     - Création dynamique d'une base de données SQLite isolée (`e2e_temp_db.sqlite3`) pour exécuter le parcours complet sans altérer la base locale.
+     - Scénario nominal validé : inscription de deux utilisateurs, création d'une cagnotte, invitation de membre, ajout de dépenses asymétriques, consultation des soldes et règlement glouton avec confirmation visuelle.
+     - Prise de 12 captures d'écran HD archivées dans `e2e/screenshots/` et rapport exhaustif dans `e2e/RAPPORT_TEST_E2E.md`.
+  2. **Résolution du Piège de Localisation (Comma vs Dot)** :
+     - Identification d'un bogue de sérialisation : en français (`USE_L10N = True`), Django formate les nombres dans les balises masquées avec une virgule (`30,00`), ce qui levait une exception `InvalidOperation` dans `Decimal()`.
+     - Correction dans `balances.html` via `{% load l10n %}` et `{{ t.amount|unlocalize }}` (poussé dans le commit `28f32a7`).
+  3. **Durcissement de Sécurité OWASP & DevSecOps** :
+     - Configuration de sécurité conditionnelle dans `src/config/settings.py` lorsque `DEBUG=False` : `SECURE_SSL_REDIRECT`, `SECURE_HSTS_SECONDS=31536000`, cookies de session et CSRF avec `HttpOnly`, `Secure` et `SameSite="Lax"`, `X_FRAME_OPTIONS = "DENY"`.
+     - Conteneurisation de production multi-stage dans `Dockerfile` avec exécution sous utilisateur non-privilégié (`USER appuser`, UID 10001).
+     - Intégration dans `.gitlab-ci.yml` d'une étape de sécurité exécutant `manage.py check --deploy`, `bandit` (SAST) et `pip-audit` (SCA).
+     - Commit `4d82f87` déployé sur la branche `main` de GitLab.
+  4. **Apprentissage & Pérennisation (/learn)** :
+     - Enregistrement de la **Règle 07** dans `.antigravity/rules/07_testing_and_security_standards.md` formalisant les 3 principes : Sandbox éphémère E2E, filtre `unlocalize` obligatoire pour les formulaires décimaux, et étanchéité des dépôts Git.
+
+---
+
+### Étape 14 : Audit de Qualité des Tests (Méthodologie Dan Luu) & Déploiement de la Phase 1 (Couverture Authentification)
+- **Objectif & Cadrage** :
+  - Analyser l'étude empirique de Dan Luu (*"How well do agents use test and verification techniques?"*) pour évaluer la robustesse de notre suite de tests face aux risques de "Verification Theater" et de tests tautologiques.
+  - Établir un diagnostic lucide de la suite de 26 tests existante et définir une feuille de route d'amélioration axée sur les invariants mathématiques et métamorphiques du domaine financier.
+  - Déployer immédiatement la **Phase 1** du plan en comblant le vide critique de couverture de l'application `apps.accounts`.
+- **Analyse Critique selon Dan Luu** :
+  - *Le piège du test tautologique* : L'agent écrit les tests avec les mêmes biais cognitifs que le code de production, conduisant à des assertions qui valident ce que le code *fait* plutôt que ce que la spécification *exige*.
+  - *Échec des prompts déclaratifs* : Dire simplement à un agent "fais du TDD" ou "utilise QuickCheck" conduit à du spectacle superficiel sans amélioration de l'exactitude logicielle.
+  - *Formulation des Invariants Métier Indépendants* :
+    1. Conservation monétaire : $\sum_{u \in M} \text{solde\_net}(u) \equiv 0.00 \text{ EUR}$
+    2. Résolution totale : L'exécution du plan glouton annule exactement toutes les dettes ($\forall u, \text{solde}_u = 0.00$).
+    3. Optimalité : Nombre de virements $T \le N - 1$.
+    4. Invariance métamorphique temporelle : L'ordre d'insertion des dépenses n'a aucun impact sur les soldes finaux.
+  - Rédaction et publication sur GitHub de [`docs/AUDIT_QUALITE_TESTS_AGENTIQUES.md`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/IF-Django/docs/AUDIT_QUALITE_TESTS_AGENTIQUES.md).
+- **Réalisations Opérationnelles (Phase 1 — `apps.accounts`)** :
+  - Refonte complète de `src/apps/accounts/tests.py` avec **17 nouveaux tests** (passage de 1 à 18 tests sur l'application) :
+    1. `UserModelTests` (4 tests) : création nominale, création superutilisateur avec privilèges `is_staff`/`is_superuser`, contrainte d'intégrité d'unicité d'email (`IntegrityError`), représentation textuelle.
+    2. `RegisterFormTests` (4 tests) : validation nominale avec hachage sécurisé, détection de discordance de mot de passe (`password_mismatch`), rejet des doublons de `username`, rejet des doublons d'adresse email (`duplicate_email_invalid`).
+    3. `AccountViewsTests` (9 tests) :
+       - Inscription (`register_view`) : affichage GET (200), soumission POST avec création effective en base, auto-login en session et redirection tableau de bord, redirection automatique si l'utilisateur est déjà connecté.
+       - Connexion (`login_view`) : affichage GET (200), authentification valide avec redirection, rejet des mauvais mots de passe avec conservation de l'état non authentifié.
+       - Déconnexion (`logout_view`) : déconnexion sécurisée en méthode POST (Django 5) et purge de session.
+       - Profil (`profile_view`) : accès nominal pour utilisateur authentifié, redirection vers login avec paramètre `?next=` pour visiteur anonyme.
+    4. `AuthenticationAccessMatrixTests` (1 test avec sous-tests) : matrice d'étanchéité vérifiant la redirection vers la mire de connexion pour toutes les URLs privées de l'application.
+- **Indicateurs & Bilan de Clôture Phase 1** :
+  - **Volume de tests global** : Passage de **26 à 43 tests unitaires**.
+  - **Taux de succès** : **100% de succès** (`Ran 43 tests in 50.099s - OK`).
+  - **Intégrité métier** : 0 modification dans les modèles et services de l'équipe (100% sanctuarisé).
+  - **Conformité PEP 8 / Flake8** : **0 warning, 0 erreur**.
+  - **GitLab Univ-Lille** : Commit [`4af9048`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/if-django-2026) poussé avec succès (`test(accounts): couverture complete des flux d'authentification, formulaires et matrice rbac`).
+  - **GitHub Assistance** : Journal de bord et rapport d'audit méthodologique Dan Luu parfaitement synchronisés.
