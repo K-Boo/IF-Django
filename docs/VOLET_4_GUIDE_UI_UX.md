@@ -379,3 +379,54 @@ Toutes les actions sensibles conservent leurs garanties de sécurité strictes d
 | **Sécurité des formulaires** | Présence des jetons `{% csrf_token %}` et dialogues de confirmation | **100 % conforme** |
 | **Intégrité de la pagination** | Navigation multipage fonctionnelle (`?page=...`) | **100 % préservée** |
 | **Code métier de Gautam & Abdelkader** | Zéro modification dans `models.py` et `services.py` | **100 % intouché** |
+
+
+---
+
+## 📘 Étape 6 / Commit 6 : Matrice des Soldes, Cartes de Flux de Dettes et Formulaires Financiers
+
+### 1. Intitulé Proposé pour le Commit (GitLab)
+```text
+feat(expenses): moderniser la matrice des soldes, les flux de dettes et les formulaires financiers
+
+- Remplacement des emojis (💸, 📥, ✅) par des symboles vectoriels SVG (#icon-chart, #icon-download, #icon-check)
+- Modernisation de la matrice des soldes individuels avec chiffres tabulaires et badges statut (creancier, debiteur, equilibre)
+- Refonte des cartes de flux de dettes (settlement-card) avec pile d'avatars et bouton direct de reglement securise
+- Ergonomie accrue des formulaires (expense_form, wallet_form, wallet_invite) avec focus rings, pastilles icones et labels aeres
+```
+
+---
+
+### 2. Décryptage Didactique du Code de l'Étape 6
+
+#### A. Clarté Cognitive de la Matrice des Soldes (`balances.html`)
+Dans les applications de partage de frais, l'écran des soldes est souvent le plus anxiogène pour les utilisateurs : il est crucial de comprendre immédiatement qui doit quoi à qui.
+- **Tokens sémantiques stricts** :
+  - *Créancier* (solde positif) : badge vert émeraude (`.badge-creditor`), sous-titre rassurant « On lui doit ».
+  - *Débiteur* (solde négatif) : badge ambré/rouge (`.badge-debtor`), sous-titre explicite « Doit de l'argent ».
+  - *À l'équilibre* (solde nul) : badge neutre (`.badge-member`), mention claire « À l'équilibre ».
+- **Chiffres tabulaires (`font-variant-numeric: tabular-nums`)** : Chaque chiffre occupe la même largeur horizontale, éliminant tout sautillement optique lors de la lecture des montants.
+
+#### B. Visualisation en Flux des Règlements (Algorithme Glouton)
+Au lieu d'un tableau brut ou d'une liste textuelle accompagnée d'émojis, le plan de remboursement calculé par l'algorithme glouton est matérialisé par des **cartes de transfert directionnel** (`.settlement-card`) :
+- Débiteur `[Avatar + Nom]` ➔ Flèche vectorielle SVG `#icon-arrow-right` ➔ Créancier `[Avatar + Nom]`.
+- Montant mis en avant en gras tabulaire.
+- Bouton d'action directe « Régler » avec icône vectorielle `#icon-check`, déclenchant le formulaire transactionnel `POST` (`expenses:reimburse`) développé au Volet 3, protégé par jeton CSRF et dialogue natif de confirmation.
+
+#### C. Ergonomie & Accessibilité des Formulaires (`expense_form.html`, `wallet_form.html`, `wallet_invite.html`)
+Les formulaires de saisie financière doivent inspirer confiance et être simples à manipuler :
+1. **Conteneur centré harmonisé (`.form-container`)** : Largeur calibrée (max 480px à 580px) pour éviter les lignes de saisie trop longues fatiguant l'œil.
+2. **Pastilles d'en-tête** : Présence d'une pastille iconographique (`#icon-receipt`, `#icon-wallet`, `#icon-users`) affirmant visuellement la nature de l'action.
+3. **Sélection des bénéficiaires** : Remplacement du bloc de cases à cocher brut par une liste espacée avec retour visuel au survol (`hover`) pour une sélection tactile et accessible.
+4. **Boutons d'action équilibrés (`.form-actions`)** : Bouton d'enregistrement primaire en pleine largeur (`flex: 1`) et bouton d'annulation secondaire.
+
+---
+
+### 3. Contrôles de Validation Effectués
+
+| Point de Contrôle | Résultat Attendu | Constat |
+| :--- | :--- | :--- |
+| **Tests unitaires Django** | `python manage.py test apps` (26 tests) | **100 % de succès (26/26 OK)** |
+| **Sécurité des formulaires** | Présence des jetons `{% csrf_token %}` et dialogues de confirmation | **100 % conforme** |
+| **Intégrité de l'algorithme glouton** | Plan de remboursement et annulation de règlements intacts | **100 % préservé** |
+| **Code métier de Gautam & Abdelkader** | Zéro modification dans `models.py` et `services.py` | **100 % intouché** |
