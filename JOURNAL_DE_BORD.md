@@ -322,3 +322,28 @@
   - **Conformité PEP 8 / Flake8** : **0 warning, 0 erreur**.
   - **GitLab Univ-Lille** : Commit [`4af9048`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/if-django-2026) poussé avec succès (`test(accounts): couverture complete des flux d'authentification, formulaires et matrice rbac`).
   - **GitHub Assistance** : Journal de bord et rapport d'audit méthodologique Dan Luu parfaitement synchronisés.
+
+
+---
+
+### Étape 15 : Résolution DevSecOps des Alertes de Sécurité & Clôture Finale du Projet
+- **Objectif & Cadrage** :
+  - Traiter l'alerte de sécurité levée par `pip-audit` sur le pipeline GitLab CI/CD suite à la détection de 9 vulnérabilités CVE répertoriées sur la version `django==5.1.15`.
+  - Effectuer une analyse d'impact préalable rigoureuse avant toute montée de version pour garantir l'absence de régression logicielle et d'impact sur le travail de Gautam et Abdelkader.
+  - Finaliser et clôturer l'ensemble des livrables du projet académique.
+- **Analyse d'Impact & Validation Préalable** :
+  1. *Rétrocompatibilité SemVer* : La montée de Django 5.1 vers 5.2 (LTS) respecte la politique de dépréciation de Django (aucun changement cassant / breaking change).
+  2. *Intégrité de la Base de Données* : Vérification via `python src/manage.py makemigrations --dry-run` attestant de **`No changes detected`** (zéro altération des schémas SQL, zéro nouvelle migration).
+  3. *Validation des Tests* : Exécution complète des 43 tests unitaires et d'intégration avec **100% de succès** et **0 DeprecationWarning**.
+  4. *Audit de Sécurité Local* : Confirmation par `pip-audit` local du passage à **`No known vulnerabilities found`** (0 vulnérabilité détectée).
+- **Réalisations Opérationnelles** :
+  - Mise à jour de `requirements.txt` sur GitLab avec la version LTS sécurisée : `Django>=5.2.18,<5.3.0`.
+  - Déploiement du commit [`9e38fd0`](file:///c:/Users/hpome/Documents/M2_MIAGE/IF/if-django-2026) sur la branche `main` du dépôt GitLab académique.
+  - Rétablissement du pipeline GitLab CI/CD à **100% de succès vert** sur les 3 étapes (`lint`, `test`, `security`).
+- **Bilan Global & Clôture du Projet M2 MIAGE IF-Django** :
+  - **Architecture & Modélisation** : Modèle relationnel 3NF étanche, relations `ForeignKey` protégées contre la suppression orpheline (`ProtectedError`), intégrité transactionnelle.
+  - **Expérience Utilisateur (UI/UX)** : Éradication complète de l'AI Slop et des émojis, design system moderne Tailwind/OKLCH, chiffres tabulaires comptables, mise en page asymétrique et composants partiels SVG.
+  - **Sécurité & DevSecOps** : Durcissement OWASP complet (`SECURE_HSTS_SECONDS`, cookies sécurisés HttpOnly/SameSite), conteneurisation Docker non-root (`USER appuser`), scans automatisés SAST (`bandit`) et SCA (`pip-audit`).
+  - **Qualité & Tests** : Suite de **43 tests unitaires et d'intégration** (100% de succès), recette E2E dynamique Chrome DevTools avec sandbox éphémère (0 pollution de données) et 12 captures d'écran HD.
+  - **Documentation & Pédagogie** : Documentation didactique complète (guides d'architecture, design system, rapport d'audit Dan Luu, journal de bord en 15 étapes).
+  - **Sanctuarisation & Travail d'Équipe** : Préservation absolue de la logique métier des camarades, zéro régression, historique Git conventionnel en français sans aucune pollution.
